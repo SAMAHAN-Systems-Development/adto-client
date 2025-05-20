@@ -1,0 +1,11 @@
+{
+  "NavbarLinks": [
+    { "title": "Home", "link": "/" },
+    { "title": "Discovered Events", "link": "/" },
+    { "title": "My Events", "link": "/" }
+  ],
+  "AccountLinks": [
+    { "title": "Profile", "link": "/", "icon": "IoMdPerson" },
+    { "title": "Settings", "link": "/", "icon": "IoSettings" }
+  ]
+}
