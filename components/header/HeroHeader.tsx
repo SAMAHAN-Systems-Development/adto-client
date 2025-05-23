@@ -1,12 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { FiMenu } from "react-icons/fi";
-import { RiNotification2Fill } from "react-icons/ri";
+
 
 const HeroHeader: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
@@ -22,8 +20,6 @@ const HeroHeader: React.FC = () => {
 
   return (
     <div className="relative">
-
-
       {/* Hero Section */}
       <div className="relative h-[68vh] md:h-[100vh] overflow-hidden">
         {/* Background Image */}
