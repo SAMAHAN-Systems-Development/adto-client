@@ -22,71 +22,10 @@ const HeroHeader: React.FC = () => {
 
   return (
     <div className="relative">
-      {/* Top Navigation */}
-      <div className="bg-gray-100 h-[10vh] py-4 px-6 flex items-center justify-between shadow-md">
-        {/* Left Section: Logo and Navigation Links */}
-        <div className="flex items-center space-x-8 ml-8"> 
-          {/* Logo */}
-          <div className="flex items-center">
-            <span className="text-3xl ml-10 font-extrabold text-blue-600">Logo</span>
-          </div>
 
-          <div className="hidden md:flex items-center space-x-8"> {/* Added ml-4 to move nav links to the right */}
-            <a
-              href="/events"
-              className="relative group hover:text-[#1e3a8a] transition-colors duration-300 ml-20"
-            >
-              Your Events
-              <span
-                className="absolute left-0 bottom-0 w-0 h-[2px] bg-[#1e3a8a] transition-all duration-300 group-hover:w-full"
-              ></span>
-            </a>
-            <a
-              href="/discover"
-              className="relative group hover:text-[#1e3a8a] transition-colors duration-300"
-            >
-              Discover Events
-              <span
-                className="absolute left-0 bottom-0 w-0 h-[2px] bg-[#1e3a8a] transition-all duration-300 group-hover:w-full"
-              ></span>
-            </a>
-          </div>
-        </div>
-
-        {/* Right Section: Notification Icon and Profile Picture */}
-        <div className="flex items-center space-x-4">
-          <button
-            className="p-2"
-            aria-label="Notifications"
-          >
-            <RiNotification2Fill className="h-6 w-6 text-[#0f172a]" />
-          </button>
-
-          {/* Profile Picture */}
-          <img
-            src="/images/temporaryavatar.jpg" 
-            alt="Profile"
-            className="h-10 w-10 rounded-full object-cover"
-          />
-        </div>
-      </div>
-
-      {/* Mobile Navigation Menu */}
-      {isMenuOpen && (
-        <div className="bg-gray-100 shadow-md md:hidden">
-          <nav className="flex flex-col space-y-4 p-4 text-gray-700 font-semibold">
-            <a href="/events" className="hover:text-blue-600">
-              Your Events
-            </a>
-            <a href="/discover" className="hover:text-blue-600">
-              Discover Events
-            </a>
-          </nav>
-        </div>
-      )}
 
       {/* Hero Section */}
-      <div className="relative h-[68vh] md:h-[70vh] overflow-hidden">
+      <div className="relative h-[68vh] md:h-[100vh] overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 h-full w-full">
           <img
