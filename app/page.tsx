@@ -16,6 +16,7 @@ import { useGetAllSamahanEventsById } from "@/client/queries/eventQuery";
 
 import NavigationBar from "@/components/ui/NavigationBar";
 import HeroHeader from "@/components/home/HeroHeader";
+import OrganizationSection from "@/components/home/OrganizationSection";
 
 
 export default function Home() {
@@ -121,6 +122,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <OrganizationSection />
     </>
   );
 }
