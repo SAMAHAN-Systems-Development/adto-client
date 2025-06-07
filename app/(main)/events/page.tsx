@@ -37,11 +37,6 @@ const EventsPage = () => {
   const isFirstPage = events?.meta.currentPage === 1;
   const isLastPage = events?.meta.currentPage === events?.meta.totalPages;
 
-  useEffect(() => {
-    console.log("Filters updated:", filters);
-    // This effect can be used to trigger any side effects when filters change
-  }, [filters]);
-
   const renderOrganizationParentOptions = organizationParents?.map(
     (orgParent: OrganizationParent) => (
       <SelectItem key={orgParent.id} value={orgParent.id}>
