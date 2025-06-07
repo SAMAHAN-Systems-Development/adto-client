@@ -10,7 +10,7 @@ export const getAllOrganizations = async () => {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch organizations");
+    console.error("Failed to fetch organizations:", response.statusText);
   }
 
   const data = await response.json();
@@ -30,7 +30,7 @@ export const getAllOrganizationParents = async () => {
   );
 
   if (!response.ok) {
-    throw new Error("Failed to fetch organization parents");
+    console.error("Failed to fetch organization parents:", response.statusText);
   }
 
   const data = await response.json();

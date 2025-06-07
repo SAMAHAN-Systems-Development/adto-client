@@ -29,7 +29,7 @@ export const getAllPublishedEvents = async (filters: EventQueryParams = {}) => {
   });
 
   if (!response.ok) {
-    throw new Error("Failed to fetch published events");
+    console.error("Failed to fetch events:", response.statusText);
   }
 
   const data = await response.json();
