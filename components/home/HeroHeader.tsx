@@ -98,23 +98,6 @@ const HeroHeader: React.FC = () => {
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </div>
-
-          <div className="flex flex-wrap justify-center gap-3">
-            <span className="text-blue-200/80 text-sm font-medium">
-              Popular searches:
-            </span>
-            {["Concerts", "Workshops", "Sports", "Seminars", "Festivals"].map(
-              (tag) => (
-                <button
-                  key={tag}
-                  onClick={() => setSearchQuery(tag)}
-                  className="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm rounded-full transition-all duration-200 hover:scale-105 backdrop-blur-sm"
-                >
-                  {tag}
-                </button>
-              )
-            )}
-          </div>
         </div>
       </div>
 
