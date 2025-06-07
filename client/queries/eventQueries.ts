@@ -1,4 +1,3 @@
-// Tanstack Query for fetching events
 import { useQuery } from "@tanstack/react-query";
 import {
   EventQueryParams,
