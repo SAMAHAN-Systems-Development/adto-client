@@ -38,7 +38,6 @@ const EventCard = React.forwardRef<HTMLDivElement, EventCardProps>(
         )}
         {...props}
       >
-        {/* Image Section */}
         <div className="relative aspect-[4/3] overflow-hidden">
           {imageUrl ? (
             <img
@@ -57,10 +56,8 @@ const EventCard = React.forwardRef<HTMLDivElement, EventCardProps>(
             </div>
           )}
 
-          {/* Overlay gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-          {/* Organization badge */}
           {organization && (
             <div className="absolute top-4 left-4">
               <Badge
@@ -73,16 +70,13 @@ const EventCard = React.forwardRef<HTMLDivElement, EventCardProps>(
           )}
         </div>
 
-        {/* Content Section */}
         <div className="p-6 space-y-4">
-          {/* Title */}
           <div className="space-y-2">
             <h3 className="text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors duration-200">
               {title || "Event Title"}
             </h3>
           </div>
 
-          {/* Date and Time Info */}
           <div className="space-y-3">
             <div className="flex items-start gap-3 text-sm text-gray-600">
               <Calendar className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
@@ -103,7 +97,6 @@ const EventCard = React.forwardRef<HTMLDivElement, EventCardProps>(
             </div>
           </div>
 
-          {/* Action Area */}
           <div className="pt-2 border-t border-gray-100">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-sm text-gray-500">
