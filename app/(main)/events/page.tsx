@@ -228,6 +228,7 @@ const EventsPage = () => {
               {events.data.map((event: Event) => (
                 <EventCard
                   key={event.id}
+                  id={event.id}
                   title={event.name}
                   organization={event.org?.name || ""}
                   dateRange={`${new Date(event.dateStart).toLocaleDateString(

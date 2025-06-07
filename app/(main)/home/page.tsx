@@ -85,6 +85,7 @@ export default function Home() {
                     >
                       <div className="transform transition-all duration-300 hover:scale-105">
                         <EventCard
+                          id={event.id}
                           title={event.name}
                           organization={event.org?.name || ""}
                           dateRange={`${formatDate(

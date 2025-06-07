@@ -6,8 +6,10 @@ import { Calendar, Clock, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useRouter } from "next/navigation";
 
 interface EventCardProps extends React.HTMLAttributes<HTMLDivElement> {
+  id: string;
   title?: string;
   organization?: string;
   dateRange?: string;
@@ -19,6 +21,7 @@ interface EventCardProps extends React.HTMLAttributes<HTMLDivElement> {
 const EventCard = React.forwardRef<HTMLDivElement, EventCardProps>(
   (
     {
+      id,
       className,
       title,
       organization,
@@ -29,6 +32,10 @@ const EventCard = React.forwardRef<HTMLDivElement, EventCardProps>(
     },
     ref
   ) => {
+    const router = useRouter();
+    const handleRedirectToDetails = () => {
+      router.push(`/events/${id}`);
+    };
     return (
       <Card
         ref={ref}
@@ -98,7 +105,10 @@ const EventCard = React.forwardRef<HTMLDivElement, EventCardProps>(
           </div>
 
           <div className="pt-2 border-t border-gray-100">
-            <div className="flex items-center justify-between">
+            <div
+              className="flex items-center justify-between"
+              onClick={() => handleRedirectToDetails()}
+            >
               <div className="flex items-center gap-2 text-sm text-gray-500">
                 <Users className="h-4 w-4" />
                 <span>Join Event</span>
