@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import Links from "@/data/links.json";
 import { IoNotifications } from "react-icons/io5";
 import { IoMdPerson, IoMdSettings } from "react-icons/io";
 import { HiMenu, HiMenuAlt3 } from "react-icons/hi";
@@ -9,6 +8,8 @@ import { useState, useEffect, useRef } from "react";
 import { Button } from "./button";
 import { Badge } from "@/components/ui/badge";
 import type { JSX } from "react";
+import { navBarLinks } from "@/lib/constants/navbarLinks";
+import { profileDropDownLinks } from "@/lib/constants/profileDropDownLinks";
 
 export default function NavigationBar() {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -17,7 +18,6 @@ export default function NavigationBar() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  const { NavbarLinks, AccountLinks } = Links;
   const iconMap: { [key: string]: JSX.Element } = {
     IoMdPerson: <IoMdPerson className="mr-3 text-lg" />,
     IoSettings: <IoMdSettings className="mr-3 text-lg" />,
@@ -73,7 +73,7 @@ export default function NavigationBar() {
             </Link>
 
             <div className="hidden md:flex items-center space-x-1">
-              {NavbarLinks.map((value, index) => (
+              {navBarLinks.map((value, index) => (
                 <Link
                   key={index}
                   href={value.link}
@@ -98,7 +98,7 @@ export default function NavigationBar() {
               {isMenuOpen && (
                 <div className="absolute top-full right-0 mt-2 w-64 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden animate-in slide-in-from-top-2 duration-200">
                   <div className="p-2">
-                    {NavbarLinks.map((value, index) => (
+                    {navBarLinks.map((value, index) => (
                       <Link
                         key={index}
                         href={value.link}
@@ -163,7 +163,7 @@ export default function NavigationBar() {
                   </div>
 
                   <div className="p-2">
-                    {AccountLinks.map((value, index) => (
+                    {profileDropDownLinks.map((value, index) => (
                       <Link
                         key={index}
                         href={value.link}
