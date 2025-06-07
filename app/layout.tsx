@@ -18,10 +18,7 @@ export default function RootLayout({
     <ReactQueryClientProvider>
       <html lang="en">
         <body className={` antialiased`}>
-          <main>
-            <NavigationBar />
-            {children}
-          </main>
+          <main>{children}</main>
           <Toaster />
         </body>
       </html>

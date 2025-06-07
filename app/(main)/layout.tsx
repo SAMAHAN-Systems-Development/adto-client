@@ -1,3 +1,4 @@
+import NavigationBar from "@/components/ui/NavigationBar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,7 +13,10 @@ export default function RootLayout({
 }>) {
   return (
     <div className={`antialiased`}>
-      <main>{children}</main>
+      <main>
+        <NavigationBar />
+        {children}
+      </main>
     </div>
   );
 }
