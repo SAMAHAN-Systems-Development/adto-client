@@ -301,7 +301,7 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
             <Separator />
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span>Registration Progress</span>
+                <span>Event Capacity</span>
                 <span>
                   {Math.round((totalRegistrations / totalCapacity) * 100)}%
                 </span>
