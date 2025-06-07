@@ -19,7 +19,7 @@ const HeroHeader: React.FC = () => {
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      window.location.href = `/events?query=${encodeURIComponent(searchQuery)}`;
+      window.location.href = `/events?searchFilter=${searchQuery}`;
     }
   };
 

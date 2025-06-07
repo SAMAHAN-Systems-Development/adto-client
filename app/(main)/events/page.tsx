@@ -26,9 +26,14 @@ import {
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { useSearchParams } from "next/navigation";
 
 const EventsPage = () => {
-  const [filters, setFilters] = useState({} as EventQueryParams);
+  const searchParams = useSearchParams();
+  const initialSearchFilter = searchParams.get("searchFilter") || "";
+  const [filters, setFilters] = useState({
+    searchFilter: initialSearchFilter,
+  } as EventQueryParams);
   const { data: organizations, isLoading: isOrganizationsLoading } =
     useGetOrganizations();
   const { data: organizationParents, isLoading: isOrganizationParentsLoading } =
