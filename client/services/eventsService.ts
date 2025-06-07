@@ -35,3 +35,20 @@ export const getAllPublishedEvents = async (filters: EventQueryParams = {}) => {
   const data = await response.json();
   return data;
 };
+
+export const getEventbyId = async (eventId: string) => {
+  const response = await fetch(`${EVENTS_BASE_URL}/${eventId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    console.error("Failed to fetch event:", response.statusText);
+  }
+
+  const data = await response.json();
+  return data;
+};
