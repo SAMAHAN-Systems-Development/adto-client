@@ -1,8 +1,9 @@
-import { ClientLoginDto } from "../types/dto/client-login.type";
-import { BASE_URL } from "../config";
+import { ADTO_SERVICE_BASE_URL } from "../config";
+import { ClientLoginRequest } from "../types/dto/auth.type";
 
-export const loginClientUser = async (loginData: ClientLoginDto) => {
-  const response = await fetch(`${BASE_URL}/auth/login`, {
+const AUTH_BASE_URL = `${ADTO_SERVICE_BASE_URL}/auth`;
+export const loginClientUser = async (loginData: ClientLoginRequest) => {
+  const response = await fetch(`${AUTH_BASE_URL}/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

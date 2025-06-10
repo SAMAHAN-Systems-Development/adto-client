@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ReactQueryClientProvider } from "@/client/react-query/react-query";
 import { Toaster } from "@/components/ui/toaster";
+import NavigationBar from "@/components/ui/NavigationBar";
 
 export const metadata: Metadata = {
   title: "ADTO Client Side Landing",
@@ -16,9 +17,7 @@ export default function RootLayout({
   return (
     <ReactQueryClientProvider>
       <html lang="en">
-        <body
-          className={` antialiased`}
-        >
+        <body className={` antialiased`}>
           <main>{children}</main>
           <Toaster />
         </body>
