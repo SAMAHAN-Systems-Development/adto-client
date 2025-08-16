@@ -48,7 +48,7 @@ const EventCard = React.forwardRef<HTMLDivElement, EventCardProps>(
       >
         <div className="relative aspect-[4/3] overflow-hidden">
           {imageUrl ? (
-            <img
+            <Image
               src={imageUrl || "/placeholder.svg"}
               alt={title || "Event Image"}
               fill
