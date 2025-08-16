@@ -4,14 +4,7 @@ import type React from "react";
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import {
-  Search,
-  Calendar,
-  MapPin,
-  Users,
-  Sparkles,
-  ArrowRight,
-} from "lucide-react";
+import { Search, Sparkles, ArrowRight } from "lucide-react";
 import { WordRotate } from "../ui/word-rotate";
 
 const HeroHeader: React.FC = () => {

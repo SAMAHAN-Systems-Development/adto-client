@@ -15,7 +15,7 @@ import { EventCard } from "@/components/EventCard";
 import type { Event } from "@/client/types/entities";
 import { formatDate } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Calendar, ArrowRight, Sparkles, Users, MapPin } from "lucide-react";
+import { Calendar, ArrowRight, Sparkles, Users } from "lucide-react";
 
 export default function Home() {
   const { data: featuredEvents, isLoading: isFeaturedEventsLoading } =
@@ -54,7 +54,7 @@ export default function Home() {
               Featured Events
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Don't Miss These{" "}
+              {`Don't Miss These `}
               <span className="bg-gradient-to-r from-blue-600 to-sky-600 bg-clip-text text-transparent">
                 Amazing Events
               </span>

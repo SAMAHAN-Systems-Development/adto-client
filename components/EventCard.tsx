@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Calendar, Clock, Users } from "lucide-react";
+import Image from "next/image";
 
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
@@ -49,8 +50,9 @@ const EventCard = React.forwardRef<HTMLDivElement, EventCardProps>(
           {imageUrl ? (
             <img
               src={imageUrl || "/placeholder.svg"}
-              alt={title}
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              alt={title || "Event Image"}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-blue-200/40 via-sky-100/30 to-blue-50/20 flex items-center justify-center">
