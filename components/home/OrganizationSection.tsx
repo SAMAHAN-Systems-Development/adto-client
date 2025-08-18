@@ -1,44 +1,43 @@
 "use client";
-import { useCategoryStore } from "@/client/store/categoryStore";
-import OrganizationCard from "@/components/OrganizationCard";
-import React, { useEffect } from "react";
-import { ChevronRightIcon } from "@radix-ui/react-icons";
+// import OrganizationCard from "@/components/OrganizationCard";
+// import { useCategoryStore } from "@/client/store/categoryStore";
+// import React, { useEffect } from "react";
+// import { ChevronRightIcon } from "@radix-ui/react-icons";
 
-interface ICategory {
-	id: number;
-	categoryName: string;
-	organizations: IOrganization[];
-}
+// interface ICategory {
+// 	id: number;
+// 	categoryName: string;
+// 	organizations: IOrganization[];
+// }
 
-interface IOrganization {
-	id: number;
-	organizationImage?: string;
-	organizationName: string;
-	numberOfEvents: number;
-}
+// interface IOrganization {
+// 	id: number;
+// 	organizationImage?: string;
+// 	organizationName: string;
+// 	numberOfEvents: number;
+// }
 
 const OrganizationSection = () => {
-	const {
-		categories,
-		loading,
-		error,
-		fetchCategories,
-		showAllByCategory,
-		toggleShowAll,
-	} = useCategoryStore();
+  // const {
+  // 	categories,
+  // 	loading,
+  // 	error,
+  // 	fetchCategories,
+  // 	showAllByCategory,
+  // 	toggleShowAll,
+  // } = useCategoryStore();
 
-	useEffect(() => {
-		fetchCategories();
-	}, [fetchCategories]);
+  // useEffect(() => {
+  // 	fetchCategories();
+  // }, [fetchCategories]);
 
-	return (
-		<div className="flex justify-center items-center min-h-screen py-10">
-			<div className="container">
+  return (
+    <div className="flex justify-center items-center min-h-screen py-10">
+      {/* <div className="container">
 				{loading && <p>Loading...</p>}
 				{error && <p>Network error</p>}
 				{!loading && !error && categories.length > 0 ? (
 					<>
-						{/* Categories */}
 						{categories
 							.filter(
 								(category) =>
@@ -49,7 +48,6 @@ const OrganizationSection = () => {
 									<h2 className="text-lg font-semibold mb-4">
 										{category.categoryName}
 									</h2>
-									{/* Organizations */}
 									<div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 										{(showAllByCategory[category.id]
 											? category.organizations
@@ -100,9 +98,9 @@ const OrganizationSection = () => {
 				) : (
 					!loading && !error && <p>No categories available.</p>
 				)}
-			</div>
-		</div>
-	);
+			</div> */}
+    </div>
+  );
 };
 
 export default OrganizationSection;
