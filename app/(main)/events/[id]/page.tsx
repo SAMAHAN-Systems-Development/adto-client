@@ -17,13 +17,12 @@ import {
   Heart,
   ArrowLeft,
   CheckCircle,
-  Star,
   UserCheck,
   AlertCircle,
 } from "lucide-react";
 import { formatDate } from "date-fns";
 import Link from "next/link";
-import { render } from "react-dom";
+import { Registration, TicketCategory } from "@/client/types/entities";
 
 const EventDetailsPage = ({ params }: { params: { id: string } }) => {
   const { id } = params;
@@ -73,7 +72,7 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
               Event Not Found
             </h2>
             <p className="text-gray-600 mb-6">
-              The event you're looking for doesn't exist or has been removed.
+              {`The event you're looking for doesn't exist or has been removed.`}
             </p>
             <Button asChild>
               <Link href="/events">
@@ -90,10 +89,10 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
   // Calculate statistics
   const totalRegistrations = event.registrations?.length || 0;
   const totalAttended =
-    event.registrations?.filter((reg: any) => reg.isAttended).length || 0;
+    event.registrations?.filter((reg: Registration) => reg.isAttended).length || 0;
   const totalCapacity =
     event.ticketCategories?.reduce(
-      (sum: number, category: any) => sum + category.capacity,
+      (sum: number, category: TicketCategory) => sum + category.capacity,
       0
     ) || 0;
 
@@ -183,7 +182,7 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
   );
 
   const renderTicketCategories = event.ticketCategories.map(
-    (category: any, index: number) => (
+    (category: TicketCategory, index: number) => (
       <div
         key={category.id}
         className="flex items-center justify-between p-6 border border-gray-200 rounded-xl hover:border-blue-300 transition-colors"
@@ -202,8 +201,7 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
             </span>
             <span className="flex items-center gap-1">
               <Clock className="h-4 w-4" />
-              Until{" "}
-              {formatDate(new Date(category.registrationDeadline), "MMM dd")}
+              Until {formatDate(new Date(category.registrationDeadline), "MMM dd")}
             </span>
           </div>
         </div>

@@ -2,24 +2,19 @@
 
 import type React from "react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import {
-  Search,
-  Calendar,
-  MapPin,
-  Users,
-  Sparkles,
-  ArrowRight,
-} from "lucide-react";
+import { Search, Sparkles, ArrowRight } from "lucide-react";
 import { WordRotate } from "../ui/word-rotate";
 
 const HeroHeader: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      window.location.href = `/events?searchFilter=${searchQuery}`;
+      router.push(`/events?searchFilter=${searchQuery}`);
     }
   };
 
@@ -61,19 +56,14 @@ const HeroHeader: React.FC = () => {
           <div className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-tight tracking-tight">
             <WordRotate
               className="bg-gradient-to-r from-yellow-300 via-orange-300 to-pink-300 bg-clip-text text-transparent drop-shadow-lg"
-              words={[
-                "Campus Events",
-                "Community Events",
-                "Fun Events",
-                "Amazing Events",
-              ]}
+              words={["Campus Events", "Community Events", "Fun Events", "Amazing Events"]}
             />
           </div>
         </div>
 
         <p className="text-xl md:text-2xl lg:text-3xl text-blue-100/90 max-w-4xl leading-relaxed font-light">
-          Connect with your community and discover incredible events happening
-          across your university campus
+          Connect with your community and discover incredible events happening across your
+          university campus
         </p>
 
         <div className="w-full max-w-4xl space-y-6">
@@ -104,13 +94,7 @@ const HeroHeader: React.FC = () => {
       <div className="w-full">
         <svg viewBox="0 0 1440 120" className="w-full h-auto">
           <defs>
-            <linearGradient
-              id="wave-gradient"
-              x1="0%"
-              y1="0%"
-              x2="100%"
-              y2="0%"
-            >
+            <linearGradient id="wave-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#ffffff" stopOpacity="0.8" />
               <stop offset="50%" stopColor="#ffffff" stopOpacity="1" />
               <stop offset="100%" stopColor="#ffffff" stopOpacity="0.8" />

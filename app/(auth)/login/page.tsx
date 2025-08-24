@@ -1,19 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -22,12 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { loginClientUser } from "@/client/services/loginService";
 import Link from "next/link";
 
@@ -40,7 +29,7 @@ const formSchema = z.object({
   password: z.string().min(1, { message: "Password is required" }),
 });
 
-export default function AdminLogin() {
+function AdminLoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -55,7 +44,6 @@ export default function AdminLogin() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-    
       email: "",
       password: "",
     },
@@ -104,9 +92,7 @@ export default function AdminLogin() {
                 <span className="text-white text-xl font-bold">LOGO</span>
               </div>
             </div>
-            <CardTitle className="text-3xl text-blue-800 font-bold">
-              Login
-            </CardTitle>
+            <CardTitle className="text-3xl text-blue-800 font-bold">Login</CardTitle>
           </div>
           <div>
             <CardDescription>lorem ipsum dolor</CardDescription>
@@ -154,18 +140,11 @@ export default function AdminLogin() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="••••••••"
-                        {...field}
-                      />
+                      <Input type="password" placeholder="••••••••" {...field} />
                     </FormControl>
                     <FormMessage />
                     <div className="flex justify-end w-full">
-                      <Link
-                        className="text-blue-800 text-sm"
-                        href="/reset-password"
-                      >
+                      <Link className="text-blue-800 text-sm" href="/reset-password">
                         Forgot Password?
                       </Link>
                     </div>
@@ -190,5 +169,13 @@ export default function AdminLogin() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function AdminLogin() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AdminLoginContent />
+    </Suspense>
   );
 }
