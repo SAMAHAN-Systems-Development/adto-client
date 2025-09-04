@@ -3,7 +3,7 @@ import {
   EventQueryParams,
   getAllPublishedEvents,
   getEventbyId,
-} from "../services/eventsService";
+} from "@/lib/services/eventsService";
 
 export const useGetEvents = (filters?: EventQueryParams) => {
   return useQuery({

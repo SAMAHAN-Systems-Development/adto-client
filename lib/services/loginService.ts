@@ -1,5 +1,5 @@
-import { ADTO_SERVICE_BASE_URL } from "../config";
-import { ClientLoginRequest } from "../types/dto/auth.type";
+import { ADTO_SERVICE_BASE_URL } from "../../client/config";
+import { ClientLoginRequest } from "../../client/types/dto/auth.type";
 
 const AUTH_BASE_URL = `${ADTO_SERVICE_BASE_URL}/auth`;
 export const loginClientUser = async (loginData: ClientLoginRequest) => {

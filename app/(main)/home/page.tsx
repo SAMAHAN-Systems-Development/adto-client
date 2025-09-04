@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import HeroHeader from "@/components/home/HeroHeader";
-import { useGetFeaturedEvents } from "@/client/queries/eventQueries";
+import HeroHeader from "@/components/layout/HeroHeader";
+import { useGetFeaturedEvents } from "@/lib/api/queries/eventQueries";
 import {
   Carousel,
   CarouselContent,
@@ -11,7 +11,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { EventCard } from "@/components/EventCard";
+import { EventCard } from "@/components/features/events/EventCard";
 import type { Event } from "@/client/types/entities";
 import { formatDate } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";

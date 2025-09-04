@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { loginClientUser } from "@/client/services/loginService";
+import { loginClientUser } from "@/lib/services/loginService";
 import Link from "next/link";
 
 // Login form schema

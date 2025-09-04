@@ -1,10 +1,10 @@
 "use client";
-import { useGetEvents } from "@/client/queries/eventQueries";
+import { useGetEvents } from "@/lib/api/queries/eventQueries";
 import {
   useGetOrganizationParents,
   useGetOrganizations,
-} from "@/client/queries/organizationQueries";
-import type { EventQueryParams } from "@/client/services/eventsService";
+} from "@/lib/api/queries/organizationQueries";
+import type { EventQueryParams } from "@/lib/services/eventsService";
 import type { Event, OrganizationParent } from "@/client/types/entities";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/select";
 import { useEffect, useRef, useState, Suspense } from "react";
 import { debounce } from "lodash";
-import { EventCard } from "@/components/EventCard";
+import { EventCard } from "@/components/features/events/EventCard";
 import { Search, Filter, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";

@@ -1,4 +1,4 @@
-import { ADTO_SERVICE_BASE_URL } from "../config";
+import { ADTO_SERVICE_BASE_URL } from "../../client/config";
 
 export const getAllOrganizations = async () => {
   const response = await fetch(`${ADTO_SERVICE_BASE_URL}/organizations/all`, {

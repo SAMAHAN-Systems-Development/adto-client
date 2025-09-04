@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getAllOrganizationParents,
   getAllOrganizations,
-} from "../services/organizationsService";
+} from "@/lib/services/organizationsService";
 
 export const useGetOrganizations = () => {
   return useQuery({

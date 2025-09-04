@@ -1,5 +1,5 @@
 // filepath: /Users/miggy.alino/Desktop/Personal/adto-client/client/services/eventsService.ts
-import { ADTO_SERVICE_BASE_URL } from "../config";
+import { ADTO_SERVICE_BASE_URL } from "../../client/config";
 import { buildQueryString } from "./utils";
 
 export const EVENTS_BASE_URL = `${ADTO_SERVICE_BASE_URL}/events`;
