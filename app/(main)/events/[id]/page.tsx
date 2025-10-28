@@ -89,7 +89,8 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
   // Calculate statistics
   const totalRegistrations = event.registrations?.length || 0;
   const totalAttended =
-    event.registrations?.filter((reg: Registration) => reg.isAttended).length || 0;
+    event.registrations?.filter((reg: Registration) => reg.isAttended).length ||
+    0;
   const totalCapacity =
     event.ticketCategories?.reduce(
       (sum: number, category: TicketCategory) => sum + category.capacity,
@@ -201,7 +202,8 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
             </span>
             <span className="flex items-center gap-1">
               <Clock className="h-4 w-4" />
-              Until {formatDate(new Date(category.registrationDeadline), "MMM dd")}
+              Until{" "}
+              {formatDate(new Date(category.registrationDeadline), "MMM dd")}
             </span>
           </div>
         </div>
