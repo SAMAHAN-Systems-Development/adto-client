@@ -32,10 +32,10 @@ const EventsContent = () => {
   const { data: organizationParents, isLoading: isOrganizationParentsLoading } =
     useGetOrganizationParents();
   const { data: events, isLoading: isEventsLoading } = useGetEvents(filters);
-  const isFirstPage = events?.meta.currentPage === 1;
-  const isLastPage = events?.meta.currentPage === events?.meta.totalPages;
+  const isFirstPage = events?.meta?.currentPage === 1;
+  const isLastPage = events?.meta?.currentPage === events?.meta?.totalPages;
 
-  const renderOrganizationParentOptions = organizationParents?.map(
+  const renderOrganizationParentOptions = organizationParents?.data?.map(
     (orgParent: OrganizationParent) => (
       <SelectItem key={orgParent.id} value={orgParent.id}>
         {orgParent.name}
@@ -43,7 +43,7 @@ const EventsContent = () => {
     )
   );
 
-  const renderOrganizationOptions = organizations?.data.map((org: OrganizationParent) => (
+  const renderOrganizationOptions = organizations?.data?.map((org: OrganizationParent) => (
     <SelectItem key={org.id} value={org.id}>
       {org.name}
     </SelectItem>
@@ -84,14 +84,14 @@ const EventsContent = () => {
   const handleNextPage = () => {
     setFilters((prev: EventQueryParams) => ({
       ...prev,
-      page: events.meta.currentPage + 1,
+      page: (events?.meta?.currentPage ?? 0) + 1,
     }));
   };
 
   const handlePreviousPage = () => {
     setFilters((prev: EventQueryParams) => ({
       ...prev,
-      page: events.meta.currentPage - 1,
+      page: (events?.meta?.currentPage ?? 1) - 1,
     }));
   };
 
