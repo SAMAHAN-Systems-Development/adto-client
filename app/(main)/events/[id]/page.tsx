@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useGetEventById } from "@/client/queries/eventQueries";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,10 +24,16 @@ import {
 import { formatDate } from "date-fns";
 import Link from "next/link";
 import { Registration, TicketCategory } from "@/client/types/entities";
+import { EventRegistrationModal } from "@/components/EventRegistrationModal";
 
 const EventDetailsPage = ({ params }: { params: { id: string } }) => {
   const { id } = params;
   const { data: event, isLoading, error } = useGetEventById(id);
+  const [registrationModalOpen, setRegistrationModalOpen] = useState(false);
+  const [selectedTicketCategory, setSelectedTicketCategory] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
 
   if (isLoading) {
     return (
@@ -215,6 +222,13 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
             className="mt-3"
             variant={index === 1 ? "default" : "outline"}
             disabled={!event.isRegistrationOpen}
+            onClick={() => {
+              setSelectedTicketCategory({
+                id: category.id,
+                name: category.name,
+              });
+              setRegistrationModalOpen(true);
+            }}
           >
             {event.isRegistrationOpen ? "Select Ticket" : "Registration Closed"}
           </Button>
@@ -230,7 +244,16 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
           <Button
             size="lg"
             className="w-full h-12 text-lg font-semibold"
-            disabled={!event.isRegistrationOpen}
+            disabled={!event.isRegistrationOpen || !event.ticketCategories?.[0]}
+            onClick={() => {
+              if (event.ticketCategories?.[0]) {
+                setSelectedTicketCategory({
+                  id: event.ticketCategories[0].id,
+                  name: event.ticketCategories[0].name,
+                });
+                setRegistrationModalOpen(true);
+              }
+            }}
           >
             <Ticket className="h-5 w-5 mr-2" />
             {event.isRegistrationOpen ? "Register Now" : "Registration Closed"}
@@ -488,6 +511,21 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
           </div>
         </div>
       </div>
+
+      {/* Registration Modal */}
+      {selectedTicketCategory && (
+        <EventRegistrationModal
+          isOpen={registrationModalOpen}
+          onClose={() => {
+            setRegistrationModalOpen(false);
+            setSelectedTicketCategory(null);
+          }}
+          eventId={id}
+          eventName={event.name}
+          ticketCategoryId={selectedTicketCategory.id}
+          ticketCategoryName={selectedTicketCategory.name}
+        />
+      )}
     </div>
   );
 };
