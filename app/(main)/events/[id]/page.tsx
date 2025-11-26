@@ -207,7 +207,7 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
             <Button
               size="lg"
               onClick={handleRegisterClick}
-              disabled={!event.isRegistrationOpen || !event.ticketCategories?.[0]}
+              disabled={!event.isRegistrationOpen || (event.isRegistrationRequired && !event.ticketCategories?.[0])}
               className="px-16 py-6 text-lg font-semibold rounded-lg bg-blue-600 hover:bg-blue-700"
             >
               {event.isRegistrationOpen ? "Register" : "Registration Closed"}
