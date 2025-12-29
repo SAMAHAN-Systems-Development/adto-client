@@ -4,10 +4,10 @@ export const REGISTRATION_BASE_URL = `${ADTO_SERVICE_BASE_URL}/registrations`;
 
 export interface CreateRegistrationPayload {
   fullName: string;
-  schoolEmail: string;
-  clusterId: string;
+  email: string;
+  cluster: string;
+  course: string;
   yearLevel: string;
-  eventId: string;
   ticketCategoryId: string;
 }
 

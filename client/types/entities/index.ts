@@ -61,16 +61,17 @@ export interface Payment {
 
 export interface Registration {
   id: string;
-  userId: string;
-  eventId: string;
+  fullName: string;
+  email: string;
+  yearLevel: string;
+  course: string;
+  cluster: string;
   confirmedAt?: Date;
   isAttended: boolean;
   ticketCategoryId: string;
   ticketCategory: TicketCategory;
-  user: User;
-  event: Event;
-  payment?: Payment;
-  formAnswers: FormAnswers[];
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface TicketCategory {
@@ -99,8 +100,7 @@ export interface Event {
   venue?: string;
   orgId: string;
   org: OrganizationChild;
-  registrations: Registration[];
-  ticketCategories: TicketCategory[];
+  TicketCategories: TicketCategory[];
   formQuestions: FormQuestions[];
 }
 
