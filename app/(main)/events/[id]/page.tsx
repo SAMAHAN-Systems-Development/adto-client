@@ -76,10 +76,10 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
 
   // Determine event price (using first ticket category)
   const eventPrice =
-    event.ticketCategories?.[0]?.price === 0
+    event.TicketCategories?.[0]?.price === 0
       ? "Free"
-      : event.ticketCategories?.[0]?.price
-      ? `₱${event.ticketCategories[0].price}`
+      : event.TicketCategories?.[0]?.price
+      ? `₱${event.TicketCategories[0].price}`
       : "Free";
 
   // Truncate description for preview (first 400 characters)
@@ -89,10 +89,10 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
       : event.description;
 
   const handleRegisterClick = () => {
-    if (event.ticketCategories?.[0]) {
+    if (event.TicketCategories?.[0]) {
       setSelectedTicketCategory({
-        id: event.ticketCategories[0].id,
-        name: event.ticketCategories[0].name,
+        id: event.TicketCategories[0].id,
+        name: event.TicketCategories[0].name,
       });
       setRegistrationModalOpen(true);
     }
@@ -207,7 +207,7 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
             <Button
               size="lg"
               onClick={handleRegisterClick}
-              disabled={!event.isRegistrationOpen || (event.isRegistrationRequired && !event.ticketCategories?.[0])}
+              disabled={!event.isRegistrationOpen || (event.isRegistrationRequired && !event.TicketCategories?.[0])}
               className="px-16 py-6 text-lg font-semibold rounded-lg bg-blue-600 hover:bg-blue-700"
             >
               {event.isRegistrationOpen ? "Register" : "Registration Closed"}

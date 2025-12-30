@@ -22,26 +22,107 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, UserCheck } from "lucide-react";
-import { useGetOrganizationParents } from "@/client/queries/organizationQueries";
+
+const CLUSTERS_AND_PROGRAMS: Record<string, string[]> = {
+  "Accountancy": [
+    "BS Accountancy",
+    "BS Management Accounting",
+  ],
+  "Business & Management": [
+    "BS Business Management",
+    "BS Entrepreneurship",
+    "BS Entrepreneurship Major in Agribusiness",
+    "BS Finance",
+    "BS Marketing",
+    "Bachelor in Public Management",
+    "BS Human Resource Development and Management",
+  ],
+  "Computer Studies Cluster": [
+    "BS Computer Science",
+    "BS Data Science",
+    "BS Information Technology",
+    "BS Information Systems",
+  ],
+  "Humanities & Letters Cluster": [
+    "AB Communications",
+    "AB English Language",
+    "AB Interdisciplinary Studies",
+    "Minor in Language and Literature",
+    "Minor in Media and Business",
+    "Minor in Media and Technology",
+    "Minor in Media and Philosophy",
+    "Minor in Philosophy and Theology",
+    "AB Philosophy",
+  ],
+  "Natural Sciences & Mathematics": [
+    "BS Biology",
+    "Major in General Biology",
+    "Major in Medical Biology",
+    "BS Chemistry",
+    "BS Environmental Science",
+    "BS Mathematics",
+  ],
+  "School of Education": [
+    "B Early Childhood Education",
+    "B Elementary Education",
+    "B Secondary Education",
+    "Major in English",
+    "Major in Mathematics",
+    "Major in Science",
+    "Major in Social Studies",
+  ],
+  "School of Engineering and Architecture": [
+    "BS Aerospace Engineering",
+    "BS Architecture",
+    "BS Chemical Engineering",
+    "BS Civil Engineering",
+    "BS Computer Engineering",
+    "BS Electrical Engineering",
+    "BS Electronics Engineering",
+    "BS Industrial Engineering",
+    "BS Mechanical Engineering",
+    "BS Robotics Engineering",
+  ],
+  "School of Nursing": [
+    "BS Nursing",
+  ],
+  "Social Sciences": [
+    "AB Anthropology - Academic Research",
+    "AB Anthropology - Community Development/Social Enterprise (COMDEV)",
+    "AB Anthropology - IP Education",
+    "AB Anthropology - Medical Anthropology",
+    "AB Development Studies",
+    "AB Economics",
+    "AB International Studies",
+    "Major in American Studies",
+    "Major in Asian Studies",
+    "Major in Islamic Studies",
+    "AB Political Science",
+    "AB Psychology",
+    "AB Sociology",
+  ],
+};
 
 const formSchema = z.object({
   fullName: z.string().min(2, {
     message: "Full name must be at least 2 characters.",
   }),
-  schoolEmail: z
-    .string()
-    .email({
-      message: "Please enter a valid email address.",
-    })
-    .refine((email) => email.endsWith("@addu.edu.ph"), {
-      message: "Please use your official @addu.edu.ph email address.",
-    }),
-  clusterId: z.string().min(1, {
+  email: z.string().email({
+    message: "Please enter a valid email address.",
+  }),
+  cluster: z.string().min(1, {
     message: "Please select a cluster.",
+  }),
+  course: z.string().min(1, {
+    message: "Please select a course.",
   }),
   yearLevel: z.string().min(1, {
     message: "Please select your year level.",
+  }),
+  dataPrivacyConsent: z.boolean().refine((val) => val === true, {
+    message: "You must agree to the Data Privacy Policy to proceed.",
   }),
 });
 
@@ -58,24 +139,26 @@ const yearLevels = [
   { value: "3", label: "3rd Year" },
   { value: "4", label: "4th Year" },
   { value: "5", label: "5th Year" },
-  { value: "graduate", label: "Graduate" },
 ];
 
 export function EventRegistrationForm({
   onSubmit,
   isSubmitting = false,
 }: EventRegistrationFormProps) {
-  const { data: clusters, isLoading: isClustersLoading } = useGetOrganizationParents();
-
   const form = useForm<RegistrationFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       fullName: "",
-      schoolEmail: "",
-      clusterId: "",
+      email: "",
+      cluster: "",
+      course: "",
       yearLevel: "",
+      dataPrivacyConsent: false,
     },
   });
+
+  const selectedCluster = form.watch("cluster");
+  const availableCourses = selectedCluster ? CLUSTERS_AND_PROGRAMS[selectedCluster] : [];
 
   const handleSubmit = async (data: RegistrationFormData) => {
     await onSubmit(data);
@@ -124,20 +207,20 @@ export function EventRegistrationForm({
 
             <FormField
               control={form.control}
-              name="schoolEmail"
+              name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>School Email</FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
-                      placeholder="juan.delacruz@addu.edu.ph"
+                      placeholder="juan.delacruz@example.com"
                       {...field}
                       disabled={isSubmitting}
                     />
                   </FormControl>
                   <FormDescription>
-                    Use your official @addu.edu.ph email address
+                    Enter your email address
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -146,14 +229,17 @@ export function EventRegistrationForm({
 
             <FormField
               control={form.control}
-              name="clusterId"
+              name="cluster"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Cluster</FormLabel>
                   <Select
-                    onValueChange={field.onChange}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      form.setValue("course", "");
+                    }}
                     defaultValue={field.value}
-                    disabled={isSubmitting || isClustersLoading}
+                    disabled={isSubmitting}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -161,21 +247,47 @@ export function EventRegistrationForm({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {isClustersLoading ? (
-                        <SelectItem value="loading" disabled>
-                          Loading clusters...
+                      {Object.keys(CLUSTERS_AND_PROGRAMS).map((cluster) => (
+                        <SelectItem key={cluster} value={cluster}>
+                          {cluster}
                         </SelectItem>
-                      ) : (
-                        clusters?.map((cluster: { id: string; name: string }) => (
-                          <SelectItem key={cluster.id} value={cluster.id}>
-                            {cluster.name}
-                          </SelectItem>
-                        ))
-                      )}
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormDescription>
                     Select the cluster you belong to
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="course"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Course/Program</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={isSubmitting || !selectedCluster}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder={selectedCluster ? "Select your course" : "Select cluster first"} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {availableCourses.map((course) => (
+                        <SelectItem key={course} value={course}>
+                          {course}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Select your course or program
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -214,6 +326,38 @@ export function EventRegistrationForm({
               )}
             />
 
+            <div className="border-t pt-6 mt-6">
+              <div className="space-y-3">
+                <FormLabel className="text-sm font-semibold text-gray-900">
+                  Data Privacy
+                </FormLabel>
+                <FormDescription className="text-sm text-gray-600">
+                  By proceeding, I consent to the collection and use of my personal data under the Data Privacy Act of 2012, solely for ticketing, event management, and official event communication.
+                </FormDescription>
+                <FormField
+                  control={form.control}
+                  name="dataPrivacyConsent"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          disabled={isSubmitting}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel className="text-sm text-gray-700 font-normal cursor-pointer">
+                          I have read and agree to the Data Privacy Policy.
+                        </FormLabel>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
             <div className="pt-4">
               <Button
                 type="submit"
@@ -223,10 +367,10 @@ export function EventRegistrationForm({
                 {isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Processing...
+                    Submitting...
                   </>
                 ) : (
-                  "Proceed to Checkout"
+                  "Submit"
                 )}
               </Button>
             </div>

@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 interface EventRegistrationModalProps {
   isOpen: boolean;
   onClose: () => void;
-  eventId: string;
+  eventId?: string; // Optional - no longer used in backend
   eventName: string;
   ticketCategoryId: string;
   ticketCategoryName?: string;
@@ -24,7 +24,6 @@ interface EventRegistrationModalProps {
 export function EventRegistrationModal({
   isOpen,
   onClose,
-  eventId,
   eventName,
   ticketCategoryId,
   ticketCategoryName,
@@ -37,10 +36,10 @@ export function EventRegistrationModal({
     try {
       await createRegistrationMutation.mutateAsync({
         fullName: formData.fullName,
-        schoolEmail: formData.schoolEmail,
-        clusterId: formData.clusterId,
+        email: formData.email,
+        cluster: formData.cluster,
+        course: formData.course,
         yearLevel: formData.yearLevel,
-        eventId,
         ticketCategoryId,
       });
 
