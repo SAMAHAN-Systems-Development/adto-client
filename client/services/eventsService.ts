@@ -16,11 +16,11 @@ export interface EventQueryParams {
   orderBy?: "asc" | "desc";
 }
 
-export const getAllPublishedEvents = async (filters: EventQueryParams = {}) => {
+export const getAllPublicEvents = async (filters: EventQueryParams = {}) => {
   const queryString = await buildQueryString(
     filters as Record<string, unknown>
   );
-  const response = await fetch(`${EVENTS_BASE_URL}/published${queryString}`, {
+  const response = await fetch(`${EVENTS_BASE_URL}/public${queryString}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
