@@ -17,10 +17,17 @@ import {
 import { useEffect, useRef, useState, Suspense } from "react";
 import { debounce } from "lodash";
 import { EventCard } from "@/components/EventCard";
-import { Search, Filter, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Search,
+  Filter,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
+import { getEventPriceDisplay } from "@/lib/utils/event-priceUtils";
 
 const EventsContent = () => {
   const searchParams = useSearchParams();
@@ -28,7 +35,8 @@ const EventsContent = () => {
   const [filters, setFilters] = useState({
     searchFilter: initialSearchFilter,
   } as EventQueryParams);
-  const { data: organizations, isLoading: isOrganizationsLoading } = useGetOrganizations();
+  const { data: organizations, isLoading: isOrganizationsLoading } =
+    useGetOrganizations();
   const { data: organizationParents, isLoading: isOrganizationParentsLoading } =
     useGetOrganizationParents();
   const { data: events, isLoading: isEventsLoading } = useGetEvents(filters);
@@ -43,11 +51,13 @@ const EventsContent = () => {
     )
   );
 
-  const renderOrganizationOptions = organizations?.data?.map((org: OrganizationParent) => (
-    <SelectItem key={org.id} value={org.id}>
-      {org.name}
-    </SelectItem>
-  ));
+  const renderOrganizationOptions = organizations?.data?.map(
+    (org: OrganizationParent) => (
+      <SelectItem key={org.id} value={org.id}>
+        {org.name}
+      </SelectItem>
+    )
+  );
 
   const handleOrganizationParentFilter = (value: string) => {
     if (value === "all") {
@@ -143,8 +153,8 @@ const EventsContent = () => {
                 </span>
               </h1>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                Find and join exciting events happening around you. Connect with communities and
-                create memorable experiences.
+                Find and join exciting events happening around you. Connect with
+                communities and create memorable experiences.
               </p>
             </div>
 
@@ -215,7 +225,9 @@ const EventsContent = () => {
                 <h2 className="text-2xl font-bold text-gray-900">
                   {events.data.length} Events Found
                 </h2>
-                <p className="text-gray-600 mt-1">Discover events that match your interests</p>
+                <p className="text-gray-600 mt-1">
+                  Discover events that match your interests
+                </p>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -223,13 +235,17 @@ const EventsContent = () => {
                 <EventCard
                   key={event.id}
                   id={event.id}
+                  price={getEventPriceDisplay(event.TicketCategories)}
                   title={event.name}
                   organization={event.org?.name || ""}
-                  dateRange={`${new Date(event.dateStart).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })} to ${new Date(event.dateEnd).toLocaleDateString("en-US", {
+                  dateRange={`${new Date(event.dateStart).toLocaleDateString(
+                    "en-US",
+                    {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    }
+                  )} to ${new Date(event.dateEnd).toLocaleDateString("en-US", {
                     month: "short",
                     day: "numeric",
                     year: "numeric",
@@ -269,9 +285,12 @@ const EventsContent = () => {
               <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
                 <Calendar className="h-12 w-12 text-gray-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">No events found</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                No events found
+              </h3>
               <p className="text-gray-600">
-                Try adjusting your search criteria or filters to find more events.
+                Try adjusting your search criteria or filters to find more
+                events.
               </p>
             </div>
           </div>

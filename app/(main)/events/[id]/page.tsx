@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
 import { EventRegistrationModal } from "@/components/EventRegistrationModal";
+import { getEventPriceDisplay } from "@/lib/utils/event-priceUtils";
 
 const EventDetailsPage = ({ params }: { params: { id: string } }) => {
   const { id } = params;
@@ -52,9 +53,12 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
       <div className="min-h-screen bg-white flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
           <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Event Not Found</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Event Not Found
+          </h2>
           <p className="text-gray-600 mb-6">
-            The event you&apos;re looking for doesn&apos;t exist or has been removed.
+            The event you&apos;re looking for doesn&apos;t exist or has been
+            removed.
           </p>
           <Button asChild>
             <Link href="/events">
@@ -74,15 +78,8 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
     "hh:mm a"
   )} - ${format(eventEndDate, "hh:mm a")}`;
 
-  // Determine event price (using first ticket category)
-  const eventPrice =
-    event.TicketCategories?.[0]?.price === 0
-      ? "Free"
-      : event.TicketCategories?.[0]?.price
-      ? `₱${event.TicketCategories[0].price}`
-      : "Free";
+  const eventPrice = getEventPriceDisplay(event.TicketCategories);
 
-  // Truncate description for preview (first 400 characters)
   const descriptionPreview =
     event.description?.length > 400 && !showFullDescription
       ? `${event.description.substring(0, 400)}...`
@@ -181,14 +178,18 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
 
             {/* Event Price - Right aligned */}
             <div className="text-right ml-8">
-              <p className="text-sm text-gray-900 font-semibold mb-1">Event Price</p>
-              <p className="text-4xl md:text-5xl font-bold text-gray-900">{eventPrice}</p>
+              <span className="text-xs text-gray-500 uppercase tracking-wide">
+                Price
+              </span>
+              <p className="text-xl font-bold text-gray-900">{eventPrice}</p>
             </div>
           </div>
 
           {/* Event Description */}
           <div className="mt-8 mb-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Event Description</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              Event Description
+            </h3>
             <div className="text-gray-700 leading-relaxed text-base whitespace-pre-line">
               {descriptionPreview}
             </div>
@@ -207,7 +208,10 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
             <Button
               size="lg"
               onClick={handleRegisterClick}
-              disabled={!event.isRegistrationOpen || (event.isRegistrationRequired && !event.TicketCategories?.[0])}
+              disabled={
+                !event.isRegistrationOpen ||
+                (event.isRegistrationRequired && !event.TicketCategories?.[0])
+              }
               className="px-16 py-6 text-lg font-semibold rounded-lg bg-blue-600 hover:bg-blue-700"
             >
               {event.isRegistrationOpen ? "Register" : "Registration Closed"}
