@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useSearchParams } from "next/navigation";
 import { getEventPriceDisplay } from "@/lib/utils/event-priceUtils";
 
@@ -34,6 +35,7 @@ const EventsContent = () => {
   const initialSearchFilter = searchParams.get("searchFilter") || "";
   const [filters, setFilters] = useState({
     searchFilter: initialSearchFilter,
+    price: "all",
   } as EventQueryParams);
   const { data: organizations, isLoading: isOrganizationsLoading } =
     useGetOrganizations();
@@ -48,7 +50,7 @@ const EventsContent = () => {
       <SelectItem key={orgParent.id} value={orgParent.id}>
         {orgParent.name}
       </SelectItem>
-    )
+    ),
   );
 
   const renderOrganizationOptions = organizations?.data?.map(
@@ -56,7 +58,7 @@ const EventsContent = () => {
       <SelectItem key={org.id} value={org.id}>
         {org.name}
       </SelectItem>
-    )
+    ),
   );
 
   const handleOrganizationParentFilter = (value: string) => {
@@ -74,7 +76,13 @@ const EventsContent = () => {
       }));
     }
   };
-
+  const handlePriceFilter = (value: "free" | "paid" | "all") => {
+    setFilters((prev) => ({
+      ...prev,
+      price: prev.price === value ? "all" : value,
+      page: 1,
+    }));
+  };
   const handleOrganizationChildFilter = (value: string) => {
     if (value === "all") {
       setFilters((prev: EventQueryParams) => ({
@@ -112,7 +120,7 @@ const EventsContent = () => {
       } else {
         setFilters((prev) => ({ ...prev, searchFilter: term }));
       }
-    }, 2000)
+    }, 2000),
   ).current;
 
   useEffect(() => {
@@ -208,6 +216,22 @@ const EventsContent = () => {
                       )}
                     </SelectContent>
                   </Select>
+                  <div className="flex flex-col sm:flex-row ml-4 gap-4">
+                    <div className="flex flex-col sm:flex-row gap-2 items-center">
+                      <Checkbox
+                        checked={filters.price === "free"}
+                        onCheckedChange={() => handlePriceFilter("free")}
+                      ></Checkbox>{" "}
+                      <label>Free</label>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-2 items-center">
+                      <Checkbox
+                        checked={filters.price === "paid"}
+                        onCheckedChange={() => handlePriceFilter("paid")}
+                      ></Checkbox>{" "}
+                      <label>Paid</label>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -244,14 +268,14 @@ const EventsContent = () => {
                       month: "short",
                       day: "numeric",
                       year: "numeric",
-                    }
+                    },
                   )} to ${new Date(event.dateEnd).toLocaleDateString("en-US", {
                     month: "short",
                     day: "numeric",
                     year: "numeric",
                   })}`}
                   timeRange={`${new Date(event.dateStart).toLocaleTimeString(
-                    "en-US"
+                    "en-US",
                   )} to ${new Date(event.dateEnd).toLocaleTimeString("en-US")}`}
                 />
               ))}

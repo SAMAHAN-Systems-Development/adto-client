@@ -14,11 +14,12 @@ export interface EventQueryParams {
   organizationParentId?: string;
   searchFilter?: string;
   orderBy?: "asc" | "desc";
+  price?: "free" | "paid" | "all";
 }
 
 export const getAllPublicEvents = async (filters: EventQueryParams = {}) => {
   const queryString = await buildQueryString(
-    filters as Record<string, unknown>
+    filters as Record<string, unknown>,
   );
   const response = await fetch(`${EVENTS_BASE_URL}/public${queryString}`, {
     method: "GET",
