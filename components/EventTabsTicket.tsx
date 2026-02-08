@@ -1,8 +1,8 @@
 import Image from "next/image";
 
 export type TicketCardProps = {
-  title: string;
-  priceLabel?: string;        // e.g. "Ticket Price"
+  name: string;
+  price?: number;        // e.g. "Ticket Price"
   description?: string;
   imageSrc?: string;          // URL or local path
   onDetails?: () => void;     // if you want a modal later
@@ -11,8 +11,8 @@ export type TicketCardProps = {
 };
 
 export default function TicketCard({
-  title,
-  priceLabel = "Ticket Price",
+  name,
+  price,
   description = "",
   imageSrc = "/placeholder.jpg",
   onDetails,
@@ -31,7 +31,7 @@ export default function TicketCard({
       <div className="relative h-44 w-full">
         <Image
           src={imageSrc}
-          alt={title}
+          alt={name}
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 25vw"
@@ -41,8 +41,8 @@ export default function TicketCard({
 
       {/* Content */}
       <div className="p-5">
-        <h3 className="text-lg font-bold text-gray-900">{title}</h3>
-        <p className="mt-1 text-sm font-medium text-gray-500">{priceLabel}</p>
+        <h3 className="text-lg font-bold text-gray-900">{name}</h3>
+        <p className="mt-1 text-sm font-medium text-gray-500">₱{price?.toFixed(2) ?? "0.00"}</p>
 
         {description ? (
           <p className="mt-3 line-clamp-3 text-sm text-gray-500">{description}</p>
