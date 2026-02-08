@@ -2,14 +2,37 @@
 
 import { useState } from "react";
 import Tickets from "@/components/EventTabsTicket";
-import TicketData from "@/lib/mock/eventTickets.json";
 import Announcements from "@/components/EventTabsAnnouncements";
-import AnnouncementData from "@/lib/mock/eventAnnouncement.json";
+import { useGetEventTickets } from "@/client/queries/eventTabTicketQueries";
+import { useGetEventAnnouncements } from "@/client/queries/eventTabAnnouncementQueries";
 
 type Tab = "tickets" | "announcements";
 
+function normalizeToArray(d: any) {
+  if (!d) return [];
+  if (Array.isArray(d)) return d;
+  if (Array.isArray(d.data)) return d.data;
+  if (Array.isArray(d.items)) return d.items;
+  return [];
+}
+
 export default function EventTabs() {
   const [activeTab, setActiveTab] = useState<Tab>("tickets");
+
+  const {
+    data: ticketsData,
+    isLoading: ticketsLoading,
+    isError: ticketsError,
+  } = useGetEventTickets();
+
+  const {
+    data: announcementsData,
+    isLoading: announcementsLoading,
+    isError: announcementsError,
+  } = useGetEventAnnouncements();
+
+  const tickets = normalizeToArray(ticketsData);
+  const announcements = normalizeToArray(announcementsData);
 
   return (
     <div className="w-full">
@@ -38,25 +61,49 @@ export default function EventTabs() {
         </button>
       </div>
 
-      {/* Optional: content placeholder */}
       <div className="mt-6">
         {activeTab === "tickets" && (
-        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {TicketData.map((ticket) => (
-            <Tickets
-                key={ticket.id}
-                title={ticket.title}
-                priceLabel={ticket.priceLabel}
-                description={ticket.description}
-                imageSrc={ticket.imageSrc}
-                detailsHref={`/tickets/${ticket.id}`}
-            />
-            ))}
-        </div>
-)}
+          <div className="mt-6">
+            {ticketsLoading ? (
+              <p className="text-sm text-gray-500">Loading tickets...</p>
+            ) : ticketsError ? (
+              <p className="text-sm text-red-500">Failed to load tickets.</p>
+            ) : (
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                {tickets.map((ticket: any) => {
+                  const title = ticket.title ?? ticket.name ?? "Untitled";
+                  const priceLabel =
+                    ticket.priceLabel ?? (ticket.price ? `₱${ticket.price}` : "Ticket Price");
+                  const description = ticket.description ?? ticket.body ?? "";
+                  const imageSrc = ticket.imageSrc ?? ticket.imageUrl ?? "/placeholder.jpg";
+                  const id = ticket.id ?? ticket._id ?? "";
+
+                  return (
+                    <Tickets
+                      key={id}
+                      title={title}
+                      priceLabel={priceLabel}
+                      description={description}
+                      imageSrc={imageSrc}
+                      detailsHref={`/tickets/${id}`}
+                    />
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
 
         {activeTab === "announcements" && (
-            <Announcements announcements={AnnouncementData} />
+          <div>
+            {announcementsLoading ? (
+              <p className="text-sm text-gray-500">Loading announcements...</p>
+            ) : announcementsError ? (
+              <p className="text-sm text-red-500">Failed to load announcements.</p>
+            ) : (
+              <Announcements announcements={announcements} />
+            )}
+          </div>
         )}
       </div>
     </div>
