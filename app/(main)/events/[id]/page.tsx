@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
 import { EventRegistrationModal } from "@/components/EventRegistrationModal";
+import Tabs from "@/components/EventTabs";
 
 const EventDetailsPage = ({ params }: { params: { id: string } }) => {
   const { id } = params;
@@ -214,6 +215,11 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
             </Button>
           </div>
         </div>
+        <section className="py-20 relative overflow-hidden">
+            <div className="pt-30">
+              <Tabs eventId={id} />
+            </div>
+        </section>
       </div>
 
       {/* Registration Modal */}

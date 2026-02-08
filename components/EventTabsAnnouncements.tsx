@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 type Announcement = {
   id: string;
   title: string;
-  body: string;
+  content: string;
   updatedAt: string;
 };
 
@@ -61,7 +61,7 @@ function AnnouncementRow({ a, isLast }: { a: Announcement; isLast: boolean }) {
   const [expanded, setExpanded] = useState(false);
 
   // When expanded changes, we want to re-check truncation (deps includes expanded)
-  const { ref, isTruncated } = useIsTruncated(a.body, [expanded]);
+  const { ref, isTruncated } = useIsTruncated(a.content, [expanded]);
 
   const showToggle = !expanded && isTruncated;
 
@@ -88,7 +88,7 @@ function AnnouncementRow({ a, isLast }: { a: Announcement; isLast: boolean }) {
               : "[display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]",
           ].join(" ")}
         >
-          {a.body}
+          {a.content}
         </p>
 
         {/* CTA area: uniform height when collapsed */}

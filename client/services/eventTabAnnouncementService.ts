@@ -1,7 +1,7 @@
 import { ADTO_SERVICE_BASE_URL } from "../config";
 import { buildQueryString } from "./utils";
 
-export const EVENT_ANNOUNCEMENTS_BASE_URL = `${ADTO_SERVICE_BASE_URL}/event-announcements`; 
+export const EVENT_ANNOUNCEMENTS_BASE_URL = `${ADTO_SERVICE_BASE_URL}/event-announcements/public`; 
 
 export interface EventTabAnnouncementParams {
     eventId?: string;

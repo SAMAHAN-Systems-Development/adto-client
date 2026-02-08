@@ -1,11 +1,9 @@
 import { ADTO_SERVICE_BASE_URL } from "../config";
 import { buildQueryString } from "./utils";
 
-export const EVENT_TICKETS_BASE_URL = `${ADTO_SERVICE_BASE_URL}/tickets`;
+export const EVENT_TICKETS_BASE_URL = `${ADTO_SERVICE_BASE_URL}/tickets/public`;
 
 export interface EventTabTicketParams {
-    page?: number;
-    limit?: number;
     eventId?: string;
 }
 

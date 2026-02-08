@@ -5,6 +5,7 @@ import Tickets from "@/components/EventTabsTicket";
 import Announcements from "@/components/EventTabsAnnouncements";
 import { useGetEventTickets } from "@/client/queries/eventTabTicketQueries";
 import { useGetEventAnnouncements } from "@/client/queries/eventTabAnnouncementQueries";
+import { EventTabTicketParams } from "@/client/services/eventTabTicketService";
 
 type Tab = "tickets" | "announcements";
 
@@ -16,20 +17,20 @@ function normalizeToArray(d: any) {
   return [];
 }
 
-export default function EventTabs() {
+export default function EventTabs({eventId}: EventTabTicketParams) {
   const [activeTab, setActiveTab] = useState<Tab>("tickets");
 
   const {
     data: ticketsData,
     isLoading: ticketsLoading,
     isError: ticketsError,
-  } = useGetEventTickets();
+  } = useGetEventTickets({ eventId });
 
   const {
     data: announcementsData,
     isLoading: announcementsLoading,
     isError: announcementsError,
-  } = useGetEventAnnouncements();
+  } = useGetEventAnnouncements({ eventId });
 
   const tickets = normalizeToArray(ticketsData);
   const announcements = normalizeToArray(announcementsData);
