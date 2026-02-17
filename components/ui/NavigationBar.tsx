@@ -33,7 +33,7 @@ export default function NavigationBar() {
             <Link href="/" className="flex-shrink-0 group">
               <div className="relative p-2 rounded-xl transition-all duration-200 group-hover:bg-gray-50">
                 <Image
-                  src="/images/Logo.png"
+                  src="/images/ADTO2_Blue.svg"
                   alt="Adto Logo"
                   width={45}
                   height={45}
