@@ -45,6 +45,8 @@ const EventsContent = () => {
   const isFirstPage = events?.meta?.currentPage === 1;
   const isLastPage = events?.meta?.currentPage === events?.meta?.totalPages;
 
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+
   const renderOrganizationParentOptions = organizationParents?.data?.map(
     (orgParent: OrganizationParent) => (
       <SelectItem key={orgParent.id} value={orgParent.id}>
@@ -160,27 +162,55 @@ const EventsContent = () => {
                   Events
                 </span>
               </h1>
-              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              <p className="text-base md:text-xl text-gray-600 max-w-2xl mx-auto">
                 Find and join exciting events happening around you. Connect with
                 communities and create memorable experiences.
               </p>
             </div>
 
             <div className="max-w-2xl mx-auto space-y-6">
+              {/* SEARCH ROW */}
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <Input
-                  onChange={(e) => debouncedSearch(e.target.value)}
-                  placeholder="Search for events, topics, or organizations..."
-                  className="pl-12 h-14 text-lg border-2 border-gray-200 focus:border-blue-500 rounded-xl shadow-sm"
-                />
+                {/* Desktop/tablet (UNCHANGED layout) */}
+                <div className="hidden sm:block">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <Input
+                    onChange={(e) => debouncedSearch(e.target.value)}
+                    placeholder="Search for events, topics, or organizations..."
+                    className="pl-12 h-14 text-lg border-2 border-gray-200 focus:border-blue-500 rounded-xl shadow-sm"
+                  />
+                </div>
+
+                {/* Mobile-only: search input + filter icon button (matches screenshot) */}
+                <div className="sm:hidden flex items-center gap-3">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <Input
+                      onChange={(e) => debouncedSearch(e.target.value)}
+                      placeholder="Search for events, topics, or organizations..."
+                      className="pl-12 h-14 text-sm md:text-lg border-2 border-gray-200 focus:border-blue-500 rounded-xl shadow-sm"
+                    />
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsMobileFiltersOpen((v) => !v)}
+                    aria-label="Toggle filters"
+                    className="h-14 w-14 flex items-center justify-center rounded-xl"
+                  >
+                    <Filter className="h-6 w-6 text-gray-500" />
+                  </button>
+                </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+              {/* FILTERS */}
+              {/* Desktop/tablet: keep EXACT current UI */}
+              <div className="hidden sm:flex flex-col sm:flex-row gap-4 items-center justify-center">
                 <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
                   <Filter className="h-4 w-4" />
                   Filter by:
                 </div>
+
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Select onValueChange={handleOrganizationParentFilter}>
                     <SelectTrigger className="w-full sm:w-[200px] h-11 border-2 border-gray-200 focus:border-blue-500 rounded-lg">
@@ -199,6 +229,7 @@ const EventsContent = () => {
                       )}
                     </SelectContent>
                   </Select>
+
                   <Select onValueChange={handleOrganizationChildFilter}>
                     <SelectTrigger className="w-full sm:w-[200px] h-11 border-2 border-gray-200 focus:border-blue-500 rounded-lg">
                       <SelectValue placeholder="Select Organization" />
@@ -216,19 +247,79 @@ const EventsContent = () => {
                       )}
                     </SelectContent>
                   </Select>
+
                   <div className="flex flex-col sm:flex-row ml-4 gap-4">
                     <div className="flex flex-col sm:flex-row gap-2 items-center">
                       <Checkbox
                         checked={filters.price === "free"}
                         onCheckedChange={() => handlePriceFilter("free")}
-                      ></Checkbox>{" "}
+                      />
                       <label>Free</label>
                     </div>
                     <div className="flex flex-col sm:flex-row gap-2 items-center">
                       <Checkbox
                         checked={filters.price === "paid"}
                         onCheckedChange={() => handlePriceFilter("paid")}
-                      ></Checkbox>{" "}
+                      />
+                      <label>Paid</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Mobile-only: collapsible filter panel */}
+              <div className={`${isMobileFiltersOpen ? "block" : "hidden"} sm:hidden`}>
+                <div className="mt-4 p-4 rounded-2xl border-2 border-gray-200 bg-white/80 backdrop-blur shadow-sm space-y-4">
+                  <Select onValueChange={handleOrganizationParentFilter}>
+                    <SelectTrigger className="w-full h-11 border-2 border-gray-200 focus:border-blue-500 rounded-lg">
+                      <SelectValue placeholder="Select Cluster" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {isOrganizationParentsLoading ? (
+                        <SelectItem value="loading" disabled>
+                          Loading...
+                        </SelectItem>
+                      ) : (
+                        <>
+                          <SelectItem value="all">All Clusters</SelectItem>
+                          {renderOrganizationParentOptions}
+                        </>
+                      )}
+                    </SelectContent>
+                  </Select>
+
+                  <Select onValueChange={handleOrganizationChildFilter}>
+                    <SelectTrigger className="w-full h-11 border-2 border-gray-200 focus:border-blue-500 rounded-lg">
+                      <SelectValue placeholder="Select Organization" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {isOrganizationsLoading ? (
+                        <SelectItem value="loading" disabled>
+                          Loading...
+                        </SelectItem>
+                      ) : (
+                        <>
+                          <SelectItem value="all">All Organizations</SelectItem>
+                          {renderOrganizationOptions}
+                        </>
+                      )}
+                    </SelectContent>
+                  </Select>
+
+                  <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-2">
+                      <Checkbox
+                        checked={filters.price === "free"}
+                        onCheckedChange={() => handlePriceFilter("free")}
+                      />
+                      <label>Free</label>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <Checkbox
+                        checked={filters.price === "paid"}
+                        onCheckedChange={() => handlePriceFilter("paid")}
+                      />
                       <label>Paid</label>
                     </div>
                   </div>
@@ -255,6 +346,7 @@ const EventsContent = () => {
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {/* <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"> */}
               {events.data.map((event: Event) => (
                 <EventCard
                   key={event.id}

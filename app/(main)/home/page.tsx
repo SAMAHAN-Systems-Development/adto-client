@@ -59,7 +59,7 @@ export default function Home() {
                 Amazing Events
               </span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-base md:text-xl text-gray-600 max-w-2xl mx-auto">
               Discover the most exciting events happening on campus and join
               your community
             </p>
@@ -160,7 +160,7 @@ export default function Home() {
 
             {/* Content */}
             <div className="relative p-8 sm:p-12 md:p-16 lg:p-20">
-              <div className="max-w-3xl">
+              <div className="max-w-3xl mx-auto md:mx-0 text-center md:text-left">
                 {/* Badge */}
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-full text-sm font-medium mb-6">
                   <Users className="h-4 w-4" />
@@ -168,13 +168,13 @@ export default function Home() {
                 </div>
 
                 {/* Main Content */}
-                <h2 className="text-white text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                <h2 className="text-white text-3xl md:text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                   Discover Campus{" "}
                   <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                     Events
                   </span>
                 </h2>
-                <p className="text-white/90 text-xl mb-8 leading-relaxed max-w-2xl">
+                <p className="text-white/90 text-base md:text-xl mb-8 leading-relaxed max-w-2xl">
                   Connect with your community and discover all SAMAHAN events
                   and campus happenings in one place. Never miss out on the
                   experiences that matter.
@@ -185,7 +185,7 @@ export default function Home() {
                   <Button
                     asChild
                     size="lg"
-                    className="bg-white text-blue-700 hover:bg-blue-50 font-semibold px-8 py-3 text-lg group shadow-lg"
+                    className="bg-white text-blue-700 hover:bg-blue-50 font-semibold px-8 py-3 text-base md:text-lg group shadow-lg"
                   >
                     <Link href="/events" className="flex items-center gap-2">
                       Browse All Events
