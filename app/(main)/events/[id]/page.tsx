@@ -120,21 +120,21 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
 
           {/* Event Title Overlay - Yellow Text */}
           <div className="absolute inset-0 flex items-center justify-center px-8">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-yellow-400 text-center drop-shadow-2xl leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-yellow-400 text-center drop-shadow-2xl leading-tight">
               {event.name}
             </h1>
           </div>
 
           {/* Tag Pills at Bottom Right */}
-          <div className="absolute bottom-6 right-6 flex flex-wrap gap-3 justify-end">
+          <div className="absolute bottom-6 md:right-6 flex flex-wrap gap-3 justify-center md:justify-end">
             {event.isRegistrationRequired && (
-              <Badge className="bg-white text-blue-600 hover:bg-white px-4 py-2 text-sm font-medium shadow-lg">
+              <Badge className="bg-white text-blue-600 hover:bg-white px-2 md:px-4 py-2 text-xs md:text-sm font-medium shadow-lg">
                 <span className="mr-2">📝</span>
                 Registration Required
               </Badge>
             )}
             {!event.isOpenToOutsiders && (
-              <Badge className="bg-white text-blue-600 hover:bg-white px-4 py-2 text-sm font-medium shadow-lg">
+              <Badge className="bg-white text-blue-600 hover:bg-white px-2 md:px-4 py-2 text-xs md:text-sm font-medium shadow-lg">
                 <span className="mr-2">👥</span>
                 Open For SAMAHAN SysDev Members
               </Badge>
@@ -152,28 +152,28 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
         <div className="mb-8">
           {/* Date & Time */}
           <div className="mb-4">
-            <p className="text-gray-600 text-base">{dateTimeString}</p>
+            <p className="text-gray-600 text-sm md:text-base">{dateTimeString}</p>
           </div>
 
           {/* Event Title & Price Row */}
           <div className="flex justify-between items-start mb-6">
             <div className="flex-1">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              <h2 className="text-2xl md:text-5xl font-bold text-gray-900 mb-6">
                 {event.name}
               </h2>
 
               {/* Organization & Venue */}
-              <div className="flex flex-wrap gap-6">
+              <div className="flex flex-wrap gap-3 md:gap-6">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-blue-600 rounded-full flex-shrink-0" />
-                  <span className="text-gray-900 font-medium">
+                  <span className="text-gray-900 text-sm md:text-base font-medium">
                     {event.org?.name || "SAMAHAN SysDev"}
                   </span>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-red-600 rounded-full flex-shrink-0" />
-                  <span className="text-gray-900">
+                  <span className="text-gray-900 text-sm md:text-base">
                     {event.venue || "8th Floor Media Room, CCFC Building"}
                   </span>
                 </div>
@@ -181,16 +181,16 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
             </div>
 
             {/* Event Price - Right aligned */}
-            <div className="text-right ml-8">
+            <div className="text-right ml-4 md:ml-8">
               <p className="text-sm text-gray-900 font-semibold mb-1">Event Price</p>
-              <p className="text-4xl md:text-5xl font-bold text-gray-900">{eventPrice}</p>
+              <p className="text-3xl md:text-5xl font-bold text-gray-900">{eventPrice}</p>
             </div>
           </div>
 
           {/* Event Description */}
           <div className="mt-8 mb-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Event Description</h3>
-            <div className="text-gray-700 leading-relaxed text-base whitespace-pre-line">
+            <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">Event Description</h3>
+            <div className="text-gray-700 leading-relaxed text-sm md:text-base whitespace-pre-line">
               {descriptionPreview}
             </div>
             {event.description?.length > 400 && (
@@ -204,12 +204,12 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
           </div>
 
           {/* Register Button - Right aligned */}
-          <div className="flex justify-end mt-8">
+          <div className="flex justify-center md:justify-end mt-8">
             <Button
               size="lg"
               onClick={handleRegisterClick}
               disabled={!event.isRegistrationOpen || (event.isRegistrationRequired && !event.TicketCategories?.[0])}
-              className="px-16 py-6 text-lg font-semibold rounded-lg bg-blue-600 hover:bg-blue-700"
+              className="text-sm px-16 py-6 md:text-lg font-semibold rounded-lg bg-blue-600 hover:bg-blue-700"
             >
               {event.isRegistrationOpen ? "Register" : "Registration Closed"}
             </Button>

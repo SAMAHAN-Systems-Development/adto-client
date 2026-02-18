@@ -361,7 +361,7 @@ export function EventRegistrationForm({
             <div className="pt-4">
               <Button
                 type="submit"
-                className="w-full h-12 text-lg font-semibold"
+                className="w-full h-12 text-sm md:text-lg font-semibold bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (

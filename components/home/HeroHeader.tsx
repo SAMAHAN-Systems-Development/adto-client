@@ -25,7 +25,7 @@ const HeroHeader: React.FC = () => {
   };
 
   return (
-    <section className="h-[100vh] bg-gradient-to-br from-blue-900 via-blue-700 to-indigo-800 overflow-hidden">
+    <section className="h-[78vh] sm:h-[81vh] md:h-[100vh] bg-gradient-to-br from-blue-900 via-blue-700 to-indigo-800 overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/30 rounded-full blur-3xl animate-pulse" />
         <div className="absolute top-40 right-20 w-96 h-96 bg-sky-300/20 rounded-full blur-3xl animate-pulse delay-1000" />
@@ -42,18 +42,18 @@ const HeroHeader: React.FC = () => {
         />
       </div>
 
-      <div className="container mx-auto px-4 flex flex-col items-center justify-center min-h-screen text-center space-y-12">
+      <div className="container mx-auto px-4 flex flex-col items-center justify-start md:justify-center pt-16 md:pt-0 min-h-screen text-center space-y-5 md:space-y-12">
         <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/15 backdrop-blur-lg border border-white/20 text-white rounded-full text-sm font-medium shadow-lg">
           <Sparkles className="h-4 w-4 text-yellow-300" />
           <span>University Event Platform</span>
           <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
         </div>
 
-        <div className="space-y-6">
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white leading-tight tracking-tight">
+        <div className="space-y-4 md:space-y-6">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white leading-tight tracking-tight">
             Discover & Join
           </h1>
-          <div className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-tight tracking-tight">
+          <div className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black leading-tight tracking-tight">
             <WordRotate
               className="bg-gradient-to-r from-yellow-300 via-orange-300 to-pink-300 bg-clip-text text-transparent drop-shadow-lg"
               words={["Campus Events", "Community Events", "Fun Events", "Amazing Events"]}
@@ -61,34 +61,46 @@ const HeroHeader: React.FC = () => {
           </div>
         </div>
 
-        <p className="text-xl md:text-2xl lg:text-3xl text-blue-100/90 max-w-4xl leading-relaxed font-light">
+        <p className="text-md md:text-xl lg:text-3xl text-blue-100/90 max-w-4xl leading-relaxed font-light">
           Connect with your community and discover incredible events happening across your
           university campus
         </p>
 
         <div className="w-full max-w-4xl space-y-6">
-          <div className="flex flex-col lg:flex-row gap-4 p-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl">
-            <div className="flex-1 flex items-center gap-3 bg-white/10 rounded-xl px-4">
+          <div className="flex flex-row items-stretch gap-3 p-3 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl">
+            <div className="flex-1 flex items-center gap-1 md:gap-3 bg-white/10 rounded-xl px-2 md:px-4 min-w-0">
               <Search className="h-6 w-6 text-blue-200 flex-shrink-0" />
               <Input
                 type="text"
                 placeholder="Search events, organizations, venues..."
-                className="flex-1 h-16 text-lg bg-transparent border-0 text-white placeholder:text-blue-200/70 focus:ring-0 focus:outline-none"
+                className="flex-1 h-10 md:h-14 text-sm md:text-base lg:text-lg bg-transparent border-0 text-white placeholder:text-blue-200/70 focus:ring-0 focus:outline-none min-w-0"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
               />
             </div>
+
             <Button
               onClick={handleSearch}
-              size="lg"
-              className="h-16 px-8 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group"
+              className="
+                h-10 sm:h-14 md:h-16
+                w-10 sm:w-14 md:w-auto
+                px-0 md:px-8
+                bg-gradient-to-r from-yellow-400 to-orange-500
+                hover:from-yellow-500 hover:to-orange-600
+                text-white font-semibold md:font-bold
+                rounded-xl shadow-lg hover:shadow-xl
+                transition-all duration-300 group
+                flex items-center justify-center
+              "
             >
-              <span>Search</span>
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              <span className="hidden md:inline">Search</span>
+              <ArrowRight className="h-5 w-5 md:ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
+
           </div>
         </div>
+
       </div>
 
       <div className="w-full">
