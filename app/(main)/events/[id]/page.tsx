@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
 import { EventRegistrationModal } from "@/components/EventRegistrationModal";
+import { getEventPriceDisplay } from "@/lib/utils/event-priceUtils";
 import Tabs from "@/components/EventTabs";
 
 const EventDetailsPage = ({ params }: { params: { id: string } }) => {
@@ -53,9 +54,12 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
       <div className="min-h-screen bg-white flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
           <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Event Not Found</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Event Not Found
+          </h2>
           <p className="text-gray-600 mb-6">
-            The event you&apos;re looking for doesn&apos;t exist or has been removed.
+            The event you&apos;re looking for doesn&apos;t exist or has been
+            removed.
           </p>
           <Button asChild>
             <Link href="/events">
@@ -75,15 +79,8 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
     "hh:mm a"
   )} - ${format(eventEndDate, "hh:mm a")}`;
 
-  // Determine event price (using first ticket category)
-  const eventPrice =
-    event.TicketCategories?.[0]?.price === 0
-      ? "Free"
-      : event.TicketCategories?.[0]?.price
-      ? `₱${event.TicketCategories[0].price}`
-      : "Free";
+  const eventPrice = getEventPriceDisplay(event.TicketCategories);
 
-  // Truncate description for preview (first 400 characters)
   const descriptionPreview =
     event.description?.length > 400 && !showFullDescription
       ? `${event.description.substring(0, 400)}...`

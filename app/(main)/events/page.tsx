@@ -28,6 +28,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useSearchParams } from "next/navigation";
+import { getEventPriceDisplay } from "@/lib/utils/event-priceUtils";
 
 const EventsContent = () => {
   const searchParams = useSearchParams();
@@ -350,6 +351,7 @@ const EventsContent = () => {
                 <EventCard
                   key={event.id}
                   id={event.id}
+                  price={getEventPriceDisplay(event.TicketCategories)}
                   title={event.name}
                   organization={event.org?.name || ""}
                   dateRange={`${new Date(event.dateStart).toLocaleDateString(
