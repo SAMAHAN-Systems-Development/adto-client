@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import HeroHeader from "@/components/home/HeroHeader";
 import { useGetFeaturedEvents } from "@/client/queries/eventQueries";
@@ -24,7 +24,6 @@ export default function Home() {
     useGetFeaturedEvents();
 
   // Dynamic carousel delay calculation
-  const [autoplayDelay, setAutoplayDelay] = useState(4000);
   const autoplayPlugin = useRef(
     Autoplay({ delay: 4000, stopOnInteraction: true })
   );
@@ -46,7 +45,6 @@ export default function Home() {
 
       // Base time per card is 4 seconds
       const newDelay = cardsVisible * 4000;
-      setAutoplayDelay(newDelay);
 
       if (autoplayPlugin.current) {
         autoplayPlugin.current.options.delay = newDelay;
