@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import HeroHeader from "@/components/home/HeroHeader";
 import { useGetFeaturedEvents } from "@/client/queries/eventQueries";
@@ -16,10 +17,44 @@ import type { Event } from "@/client/types/entities";
 import { formatDate } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar, ArrowRight, Sparkles, Users } from "lucide-react";
+import Autoplay from "embla-carousel-autoplay";
 
 export default function Home() {
   const { data: featuredEvents, isLoading: isFeaturedEventsLoading } =
     useGetFeaturedEvents();
+
+  // Dynamic carousel delay calculation
+  const autoplayPlugin = useRef(
+    Autoplay({ delay: 4000, stopOnInteraction: true })
+  );
+
+  useEffect(() => {
+    const calculateDelay = () => {
+      const width = window.innerWidth;
+      // Default (mobile) is 1 card
+      let cardsVisible = 1;
+
+      // These match the Tailwind breakpoints applied to CarouselItem
+      if (width >= 1280) { // xl
+        cardsVisible = 4;
+      } else if (width >= 1024) { // lg
+        cardsVisible = 3;
+      } else if (width >= 768) { // md
+        cardsVisible = 2;
+      }
+
+      // Base time per card is 4 seconds
+      const newDelay = cardsVisible * 4000;
+
+      if (autoplayPlugin.current) {
+        autoplayPlugin.current.options.delay = newDelay;
+      }
+    };
+
+    calculateDelay(); // Initial calc
+    window.addEventListener('resize', calculateDelay);
+    return () => window.removeEventListener('resize', calculateDelay);
+  }, []);
 
   const FeaturedEventsSkeleton = () => (
     <div className="flex space-x-4">
@@ -36,19 +71,18 @@ export default function Home() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-sky-50">
+    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       <HeroHeader />
 
       {/* Featured Events Section */}
-      <section className="py-16 px-4 lg:px-8 relative overflow-hidden">
+      <section id="featured-events" className="min-h-[100dvh] pt-16 md:pt-24 pb-0 px-8 lg:px-24 relative overflow-hidden flex flex-col justify-center">
         {/* Background decoration */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-sky-500/5" />
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-200/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-sky-200/20 rounded-full blur-3xl" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-100/40 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-sky-100/40 rounded-full blur-3xl pointer-events-none" />
 
         <div className="container mx-auto relative">
           {/* Section Header */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-6 md:mb-12">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mb-4">
               <Sparkles className="h-4 w-4" />
               Featured Events
@@ -71,20 +105,24 @@ export default function Home() {
           ) : featuredEvents?.data && featuredEvents.data.length > 0 ? (
             <div className="relative">
               <Carousel
+                plugins={[autoplayPlugin.current]}
                 opts={{
                   align: "start",
                   loop: true,
+                  slidesToScroll: "auto",
                 }}
-                className="w-full"
+                className="w-full py-4"
+                aria-label="Featured Events Carousel"
               >
                 <CarouselContent className="-ml-6">
                   {featuredEvents.data.map((event: Event) => (
                     <CarouselItem
                       key={event.id}
-                      className="pl-6 md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+                      className="pl-6 py-6 md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
                     >
-                      <div className="transform transition-all duration-300 hover:scale-105">
+                      <div className="h-full transform transition-all duration-300 hover:scale-105">
                         <EventCard
+                          className="h-full"
                           id={event.id}
                           title={event.name}
                           organization={event.org?.name || ""}
@@ -94,9 +132,15 @@ export default function Home() {
                           )} to ${formatDate(event.dateEnd, "MMM dd, yyyy")}`}
                           timeRange={`${new Date(
                             event.dateStart
-                          ).toLocaleTimeString()} to ${new Date(
+                          ).toLocaleTimeString("en-US", {
+                            hour: "numeric",
+                            minute: "2-digit",
+                          })} to ${new Date(
                             event.dateEnd
-                          ).toLocaleTimeString()}`}
+                          ).toLocaleTimeString("en-US", {
+                            hour: "numeric",
+                            minute: "2-digit",
+                          })}`}
                           imageUrl=""
                         />
                       </div>
@@ -105,16 +149,12 @@ export default function Home() {
                 </CarouselContent>
 
                 {/* Custom Navigation Buttons */}
-                <div className="absolute top-1/2 -left-6 -translate-y-1/2 hidden lg:block">
-                  <CarouselPrevious className="h-12 w-12 border-2 border-blue-200 bg-white/90 hover:bg-blue-50 hover:border-blue-300 shadow-lg" />
-                </div>
-                <div className="absolute top-1/2 -right-6 -translate-y-1/2 hidden lg:block">
-                  <CarouselNext className="h-12 w-12 border-2 border-blue-200 bg-white/90 hover:bg-blue-50 hover:border-blue-300 shadow-lg" />
-                </div>
+                <CarouselPrevious className="hidden lg:flex h-12 w-12 border-2 border-blue-200 bg-white/90 hover:bg-blue-50 hover:border-blue-300 shadow-lg -left-4 lg:-left-12 xl:-left-16" />
+                <CarouselNext className="hidden lg:flex h-12 w-12 border-2 border-blue-200 bg-white/90 hover:bg-blue-50 hover:border-blue-300 shadow-lg -right-4 lg:-right-12 xl:-right-16" />
               </Carousel>
 
               {/* View All Events Link */}
-              <div className="text-center mt-12">
+              <div className="text-center mt-6">
                 <Button asChild variant="outline" size="lg" className="group">
                   <Link href="/events" className="flex items-center gap-2">
                     View All Events
@@ -142,7 +182,7 @@ export default function Home() {
       </section>
 
       {/* Enhanced Spotlight Banner */}
-      <section className="py-20 px-4 lg:px-8 relative overflow-hidden">
+      <section className="py-10 md:py-16 px-4 lg:px-8 relative overflow-hidden">
         <div className="container mx-auto">
           <div className="relative rounded-3xl overflow-hidden shadow-2xl">
             {/* Background Image with Overlay */}
@@ -159,8 +199,8 @@ export default function Home() {
             <div className="absolute bottom-0 left-0 w-96 h-96 bg-sky-300/20 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2" />
 
             {/* Content */}
-            <div className="relative p-8 sm:p-12 md:p-16 lg:p-20">
-              <div className="max-w-3xl mx-auto md:mx-0 text-center md:text-left">
+            <div className="relative p-8 sm:p-12 md:p-16 lg:p-24">
+              <div className="max-w-4xl mx-auto md:mx-0 text-center md:text-left">
                 {/* Badge */}
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm text-white rounded-full text-sm font-medium mb-6">
                   <Users className="h-4 w-4" />

@@ -3,11 +3,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { HiMenu, HiMenuAlt3 } from "react-icons/hi";
 import { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { navBarLinks } from "@/lib/constants/navbarLinks";
 
 export default function NavigationBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -43,20 +45,32 @@ export default function NavigationBar() {
             </Link>
 
             <div className="hidden md:flex items-center space-x-1">
-              {navBarLinks.map((value, index) => (
-                <Link
-                  key={index}
-                  href={value.link}
-                  className="relative px-4 py-2 text-gray-700 font-medium rounded-lg transition-all duration-200 hover:text-blue-600 hover:bg-blue-50 group"
-                >
-                  {value.title}
-                  <span className="absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 transform scale-x-0 transition-transform duration-200 group-hover:scale-x-100" />
-                </Link>
-              ))}
+              {navBarLinks.map((value, index) => {
+                const isActive = value.link === "/home"
+                  ? pathname === "/home" || pathname === "/"
+                  : pathname.startsWith(value.link);
+                return (
+                  <Link
+                    key={index}
+                    href={value.link}
+                    className={`relative px-4 py-2 font-medium rounded-lg transition-all duration-200 group ${isActive
+                      ? "text-blue-600 bg-blue-50"
+                      : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                      }`}
+                  >
+                    {value.title}
+                    <span
+                      className={`absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 transform transition-transform duration-200 ${isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                        }`}
+                    />
+                  </Link>
+                );
+              })}
             </div>
           </div>
 
           <div className="flex items-center space-x-3">
+
             <div className="relative md:hidden" ref={menuRef}>
               <button
                 onClick={handleMenuClick}
@@ -68,16 +82,24 @@ export default function NavigationBar() {
               {isMenuOpen && (
                 <div className="absolute top-full right-0 mt-2 w-64 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden animate-in slide-in-from-top-2 duration-200">
                   <div className="p-2">
-                    {navBarLinks.map((value, index) => (
-                      <Link
-                        key={index}
-                        href={value.link}
-                        className="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-all duration-200"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <span className="font-medium">{value.title}</span>
-                      </Link>
-                    ))}
+                    {navBarLinks.map((value, index) => {
+                      const isActive = value.link === "/home"
+                        ? pathname === "/home" || pathname === "/"
+                        : pathname.startsWith(value.link);
+                      return (
+                        <Link
+                          key={index}
+                          href={value.link}
+                          className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${isActive
+                            ? "text-blue-600 bg-blue-50 font-semibold"
+                            : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
+                            }`}
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          <span className="font-medium">{value.title}</span>
+                        </Link>
+                      );
+                    })}
                   </div>
                 </div>
               )}
