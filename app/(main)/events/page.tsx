@@ -37,6 +37,8 @@ const EventsContent = () => {
     searchFilter: initialSearchFilter,
     price: "all",
   } as EventQueryParams);
+  const [priceFree, setPriceFree] = useState(false);
+  const [pricePaid, setPricePaid] = useState(false);
   const { data: organizations, isLoading: isOrganizationsLoading } =
     useGetOrganizations();
   const { data: organizationParents, isLoading: isOrganizationParentsLoading } =
@@ -44,6 +46,9 @@ const EventsContent = () => {
   const { data: events, isLoading: isEventsLoading } = useGetEvents(filters);
   const isFirstPage = events?.meta?.currentPage === 1;
   const isLastPage = events?.meta?.currentPage === events?.meta?.totalPages;
+  const totalEvents = events?.meta?.totalItems ?? events?.data?.length ?? 0;
+  const currentPage = events?.meta?.currentPage ?? 1;
+  const totalPages = events?.meta?.totalPages ?? 1;
 
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
@@ -78,13 +83,14 @@ const EventsContent = () => {
       }));
     }
   };
-  const handlePriceFilter = (value: "free" | "paid" | "all") => {
-    setFilters((prev) => ({
-      ...prev,
-      price: prev.price === value ? "all" : value,
-      page: 1,
-    }));
-  };
+  // Derive price filter from independent checkboxes
+  useEffect(() => {
+    let price: "free" | "paid" | "all" = "all";
+    if (priceFree && !pricePaid) price = "free";
+    else if (!priceFree && pricePaid) price = "paid";
+    // both checked or both unchecked → "all"
+    setFilters((prev) => ({ ...prev, price, page: 1 }));
+  }, [priceFree, pricePaid]);
   const handleOrganizationChildFilter = (value: string) => {
     if (value === "all") {
       setFilters((prev: EventQueryParams) => ({
@@ -251,15 +257,15 @@ const EventsContent = () => {
                   <div className="flex flex-col sm:flex-row ml-4 gap-4">
                     <div className="flex flex-col sm:flex-row gap-2 items-center">
                       <Checkbox
-                        checked={filters.price === "free"}
-                        onCheckedChange={() => handlePriceFilter("free")}
+                        checked={priceFree}
+                        onCheckedChange={(v) => setPriceFree(!!v)}
                       />
                       <label>Free</label>
                     </div>
                     <div className="flex flex-col sm:flex-row gap-2 items-center">
                       <Checkbox
-                        checked={filters.price === "paid"}
-                        onCheckedChange={() => handlePriceFilter("paid")}
+                        checked={pricePaid}
+                        onCheckedChange={(v) => setPricePaid(!!v)}
                       />
                       <label>Paid</label>
                     </div>
@@ -309,16 +315,16 @@ const EventsContent = () => {
                   <div className="flex items-center gap-6">
                     <div className="flex items-center gap-2">
                       <Checkbox
-                        checked={filters.price === "free"}
-                        onCheckedChange={() => handlePriceFilter("free")}
+                        checked={priceFree}
+                        onCheckedChange={(v) => setPriceFree(!!v)}
                       />
                       <label>Free</label>
                     </div>
 
                     <div className="flex items-center gap-2">
                       <Checkbox
-                        checked={filters.price === "paid"}
-                        onCheckedChange={() => handlePriceFilter("paid")}
+                        checked={pricePaid}
+                        onCheckedChange={(v) => setPricePaid(!!v)}
                       />
                       <label>Paid</label>
                     </div>
@@ -338,7 +344,7 @@ const EventsContent = () => {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h2 className="text-2xl font-bold text-gray-900">
-                  {events.data.length} Events Found
+                  {totalEvents} Events Found
                 </h2>
                 <p className="text-gray-600 mt-1">
                   Discover events that match your interests
@@ -346,7 +352,7 @@ const EventsContent = () => {
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {/* <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"> */}
+              {/* <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"> */}
               {events.data.map((event: Event) => (
                 <EventCard
                   key={event.id}
@@ -368,7 +374,11 @@ const EventsContent = () => {
                   })}`}
                   timeRange={`${new Date(event.dateStart).toLocaleTimeString(
                     "en-US",
-                  )} to ${new Date(event.dateEnd).toLocaleTimeString("en-US")}`}
+                    { hour: "numeric", minute: "2-digit" },
+                  )} to ${new Date(event.dateEnd).toLocaleTimeString("en-US", {
+                    hour: "numeric",
+                    minute: "2-digit",
+                  })}`}
                 />
               ))}
             </div>
@@ -383,6 +393,10 @@ const EventsContent = () => {
                 <ChevronLeft className="h-4 w-4" />
                 Previous Page
               </Button>
+
+              <span className="text-sm font-medium text-gray-700">
+                Page {currentPage} of {totalPages}
+              </span>
 
               <Button
                 onClick={handleNextPage}

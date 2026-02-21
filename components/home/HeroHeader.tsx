@@ -25,7 +25,7 @@ const HeroHeader: React.FC = () => {
   };
 
   return (
-    <section className="h-[78vh] sm:h-[81vh] md:h-[100vh] bg-gradient-to-br from-blue-900 via-blue-700 to-indigo-800 overflow-hidden">
+    <section className="relative h-[78vh] sm:h-[81vh] md:h-[100vh] bg-gradient-to-br from-blue-900 via-blue-700 to-indigo-800 overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/30 rounded-full blur-3xl animate-pulse" />
         <div className="absolute top-40 right-20 w-96 h-96 bg-sky-300/20 rounded-full blur-3xl animate-pulse delay-1000" />

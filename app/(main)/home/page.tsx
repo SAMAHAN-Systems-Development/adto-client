@@ -36,7 +36,7 @@ export default function Home() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-sky-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-sky-50 overflow-x-hidden">
       <HeroHeader />
 
       {/* Featured Events Section */}
@@ -94,9 +94,15 @@ export default function Home() {
                           )} to ${formatDate(event.dateEnd, "MMM dd, yyyy")}`}
                           timeRange={`${new Date(
                             event.dateStart
-                          ).toLocaleTimeString()} to ${new Date(
+                          ).toLocaleTimeString("en-US", {
+                            hour: "numeric",
+                            minute: "2-digit",
+                          })} to ${new Date(
                             event.dateEnd
-                          ).toLocaleTimeString()}`}
+                          ).toLocaleTimeString("en-US", {
+                            hour: "numeric",
+                            minute: "2-digit",
+                          })}`}
                           imageUrl=""
                         />
                       </div>

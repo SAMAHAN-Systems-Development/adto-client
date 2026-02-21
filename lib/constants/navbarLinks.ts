@@ -1,5 +1,6 @@
 export const navBarLinks = [
   { title: "Home", link: "/home" },
   { title: "Discovered Events", link: "/events" },
-  { title: "My Events", link: "/profile" },
+  // TODO: Re-enable when My Events is ready
+  // { title: "My Events", link: "/profile" },
 ];
