@@ -46,7 +46,7 @@ const EventsContent = () => {
   const { data: events, isLoading: isEventsLoading } = useGetEvents(filters);
   const isFirstPage = events?.meta?.currentPage === 1;
   const isLastPage = events?.meta?.currentPage === events?.meta?.totalPages;
-  const totalEvents = events?.meta?.totalItems ?? events?.data?.length ?? 0;
+  const totalEvents = events?.meta?.totalCount ?? events?.data?.length ?? 0;
   const currentPage = events?.meta?.currentPage ?? 1;
   const totalPages = events?.meta?.totalPages ?? 1;
 
@@ -152,7 +152,7 @@ const EventsContent = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-sky-100">
+    <div className="min-h-screen bg-gray-50">
       <div className="relative bg-white border-b">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-sky-500/10" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">

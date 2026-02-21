@@ -10,6 +10,18 @@ export default function NavigationBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Handle scroll detection for the dynamic CTA
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show CTA after scrolling past the hero section (approx 500px)
+      setIsScrolled(window.scrollY > 500);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -54,8 +66,8 @@ export default function NavigationBar() {
                     key={index}
                     href={value.link}
                     className={`relative px-4 py-2 font-medium rounded-lg transition-all duration-200 group ${isActive
-                        ? "text-blue-600 bg-blue-50"
-                        : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                      ? "text-blue-600 bg-blue-50"
+                      : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
                       }`}
                   >
                     {value.title}
@@ -70,6 +82,26 @@ export default function NavigationBar() {
           </div>
 
           <div className="flex items-center space-x-3">
+            {/* Dynamic CTA Button */}
+            <div
+              className={`hidden md:block transition-all duration-500 ease-in-out ${pathname.startsWith("/events")
+                  ? "opacity-100 translate-y-0"
+                  : isScrolled
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 -translate-y-4 pointer-events-none"
+                }`}
+            >
+              <Link
+                href="/events"
+                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium shadow-md transition-all transform hover:-translate-y-0.5 ${pathname.startsWith("/events")
+                    ? "bg-blue-100 text-blue-700 hover:bg-blue-200 hover:shadow-md"
+                    : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white hover:shadow-lg"
+                  }`}
+              >
+                Discover Events
+              </Link>
+            </div>
+
             <div className="relative md:hidden" ref={menuRef}>
               <button
                 onClick={handleMenuClick}
@@ -90,8 +122,8 @@ export default function NavigationBar() {
                           key={index}
                           href={value.link}
                           className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${isActive
-                              ? "text-blue-600 bg-blue-50 font-semibold"
-                              : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
+                            ? "text-blue-600 bg-blue-50 font-semibold"
+                            : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
                             }`}
                           onClick={() => setIsMenuOpen(false)}
                         >
