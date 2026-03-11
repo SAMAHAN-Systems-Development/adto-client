@@ -76,7 +76,7 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
   const eventEndDate = new Date(event.dateEnd);
   const dateTimeString = `${format(eventDate, "MMMM dd, yyyy")} | ${format(
     eventDate,
-    "hh:mm a"
+    "hh:mm a",
   )} - ${format(eventEndDate, "hh:mm a")}`;
 
   const eventPrice = getEventPriceDisplay(event.TicketCategories);
@@ -103,9 +103,9 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
         {/* Event Banner with rounded corners */}
         <div className="relative w-full h-[400px] overflow-hidden rounded-3xl shadow-lg mb-8">
           {/* Background Image */}
-          {event.bannerImage ? (
+          {event.banner ? (
             <Image
-              src={event.bannerImage}
+              src={event.banner}
               alt={event.name}
               fill
               className="object-cover"
@@ -149,7 +149,9 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
         <div className="mb-8">
           {/* Date & Time */}
           <div className="mb-4">
-            <p className="text-gray-600 text-sm md:text-base">{dateTimeString}</p>
+            <p className="text-gray-600 text-sm md:text-base">
+              {dateTimeString}
+            </p>
           </div>
 
           {/* Event Title & Price Row */}
@@ -179,14 +181,20 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
 
             {/* Event Price - Right aligned */}
             <div className="text-right ml-4 md:ml-8">
-              <p className="text-sm text-gray-900 font-semibold mb-1">Event Price</p>
-              <p className="text-3xl md:text-5xl font-bold text-gray-900">{eventPrice}</p>
+              <p className="text-sm text-gray-900 font-semibold mb-1">
+                Event Price
+              </p>
+              <p className="text-3xl md:text-5xl font-bold text-gray-900">
+                {eventPrice}
+              </p>
             </div>
           </div>
 
           {/* Event Description */}
           <div className="mt-8 mb-8">
-            <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">Event Description</h3>
+            <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">
+              Event Description
+            </h3>
             <div className="text-gray-700 leading-relaxed text-sm md:text-base whitespace-pre-line">
               {descriptionPreview}
             </div>
@@ -205,7 +213,10 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
             <Button
               size="lg"
               onClick={handleRegisterClick}
-              disabled={!event.isRegistrationOpen || (event.isRegistrationRequired && !event.TicketCategories?.[0])}
+              disabled={
+                !event.isRegistrationOpen ||
+                (event.isRegistrationRequired && !event.TicketCategories?.[0])
+              }
               className="text-sm px-16 py-6 md:text-lg font-semibold rounded-lg bg-blue-600 hover:bg-blue-700"
             >
               {event.isRegistrationOpen ? "Register" : "Registration Closed"}
@@ -213,9 +224,9 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
           </div>
         </div>
         <section className="py-20 relative overflow-hidden">
-            <div className="pt-30">
-              <Tabs eventId={id} />
-            </div>
+          <div className="pt-30">
+            <Tabs eventId={id} />
+          </div>
         </section>
       </div>
 
