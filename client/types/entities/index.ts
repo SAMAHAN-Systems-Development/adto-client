@@ -78,6 +78,7 @@ export interface TicketCategory {
   id: string;
   name: string;
   description: string;
+  thumbnail?: string;
   price: number;
   capacity: number;
   registrationDeadline: Date;
@@ -90,7 +91,6 @@ export interface Event {
   id: string;
   name: string;
   description: string;
-  thumbnail?: string;
   banner?: string;
   dateStart: Date;
   dateEnd: Date;

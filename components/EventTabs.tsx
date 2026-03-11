@@ -26,7 +26,13 @@ export default function EventTabs({ eventId }: EventTabTicketParams) {
     isError: announcementsError,
   } = useGetEventAnnouncements({ eventId });
 
-  function EmptyState({ title, subtitle }: { title: string; subtitle?: string }) {
+  function EmptyState({
+    title,
+    subtitle,
+  }: {
+    title: string;
+    subtitle?: string;
+  }) {
     return (
       <div className="flex flex-col items-center justify-center p-8 border border-gray-200 rounded-xl bg-gray-50">
         <svg
@@ -44,14 +50,23 @@ export default function EventTabs({ eventId }: EventTabTicketParams) {
           />
         </svg>
         <h3 className="mt-3 text-sm font-semibold text-gray-800">{title}</h3>
-        {subtitle && <p className="mt-1 text-xs text-gray-500 text-center">{subtitle}</p>}
+        {subtitle && (
+          <p className="mt-1 text-xs text-gray-500 text-center">{subtitle}</p>
+        )}
       </div>
     );
   }
 
   const renderTicketsContent = () => {
-    if (ticketsLoading) return <EmptyState title="Loading tickets..." subtitle="Please wait" />;
-    if (ticketsError) return <EmptyState title="Failed to load tickets" subtitle="Please try again later" />;
+    if (ticketsLoading)
+      return <EmptyState title="Loading tickets..." subtitle="Please wait" />;
+    if (ticketsError)
+      return (
+        <EmptyState
+          title="Failed to load tickets"
+          subtitle="Please try again later"
+        />
+      );
 
     const list = ticketsData?.data ?? [];
     if (list.length === 0)
@@ -61,6 +76,7 @@ export default function EventTabs({ eventId }: EventTabTicketParams) {
           subtitle="Check back later or contact the organizer"
         />
       );
+    const defaultImage = "/images/ADTO2_Blue.svg";
 
     return (
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -68,7 +84,7 @@ export default function EventTabs({ eventId }: EventTabTicketParams) {
           const name = ticket.name ?? "Untitled";
           const price = ticket.price;
           const description = ticket.description ?? "";
-          const imageSrc = "/placeholder.jpg";
+          const imageSrc = ticket.thumbnail ?? defaultImage;
           const id = ticket.id;
 
           return (
@@ -88,13 +104,25 @@ export default function EventTabs({ eventId }: EventTabTicketParams) {
 
   const renderAnnouncementsContent = () => {
     if (announcementsLoading)
-      return <EmptyState title="Loading announcements..." subtitle="Please wait" />;
+      return (
+        <EmptyState title="Loading announcements..." subtitle="Please wait" />
+      );
     if (announcementsError)
-      return <EmptyState title="Failed to load announcements" subtitle="Please try again later" />;
+      return (
+        <EmptyState
+          title="Failed to load announcements"
+          subtitle="Please try again later"
+        />
+      );
 
     const list = announcementsData?.data ?? [];
     if (list.length === 0)
-      return <EmptyState title="No announcements yet" subtitle="There are no posts for this event" />;
+      return (
+        <EmptyState
+          title="No announcements yet"
+          subtitle="There are no posts for this event"
+        />
+      );
 
     return <Announcements announcements={list} />;
   };
@@ -115,7 +143,9 @@ export default function EventTabs({ eventId }: EventTabTicketParams) {
               onClick={() => toggleMobile("tickets")}
               className="w-full flex items-center justify-between px-4 py-4 text-left hover:bg-gray-50 transition"
             >
-              <span className="text-sm font-semibold text-gray-900">Tickets</span>
+              <span className="text-sm font-semibold text-gray-900">
+                Tickets
+              </span>
               <span className="text-lg text-gray-400">
                 {mobileExpanded === "tickets" ? "–" : "+"}
               </span>
@@ -132,14 +162,18 @@ export default function EventTabs({ eventId }: EventTabTicketParams) {
               onClick={() => toggleMobile("announcements")}
               className="w-full flex items-center justify-between px-4 py-4 text-left hover:bg-gray-50 transition"
             >
-              <span className="text-sm font-semibold text-gray-900">Announcements</span>
+              <span className="text-sm font-semibold text-gray-900">
+                Announcements
+              </span>
               <span className="text-lg text-gray-400">
                 {mobileExpanded === "announcements" ? "–" : "+"}
               </span>
             </button>
 
             {mobileExpanded === "announcements" && (
-              <div className="px-4 pb-4 pt-2">{renderAnnouncementsContent()}</div>
+              <div className="px-4 pb-4 pt-2">
+                {renderAnnouncementsContent()}
+              </div>
             )}
           </div>
         </div>
@@ -173,8 +207,12 @@ export default function EventTabs({ eventId }: EventTabTicketParams) {
 
         {/* Desktop Content ONLY (prevents mobile duplication) */}
         <div className="mt-6">
-          {activeTab === "tickets" && <div className="mt-2">{renderTicketsContent()}</div>}
-          {activeTab === "announcements" && <div className="mt-2">{renderAnnouncementsContent()}</div>}
+          {activeTab === "tickets" && (
+            <div className="mt-2">{renderTicketsContent()}</div>
+          )}
+          {activeTab === "announcements" && (
+            <div className="mt-2">{renderAnnouncementsContent()}</div>
+          )}
         </div>
       </div>
     </div>
