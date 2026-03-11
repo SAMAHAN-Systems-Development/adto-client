@@ -36,3 +36,28 @@ export const getAllOrganizationParents = async () => {
   const data = await response.json();
   return data;
 };
+
+export const getOrganizationsByOrganizationParent = async (
+  organizationParentId: string,
+) => {
+  const response = await fetch(
+    `${ADTO_SERVICE_BASE_URL}/organizations/organizationParent/${organizationParentId}?page=1&limit=1000`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    console.error(
+      "Failed to fetch organizations by organization parent:",
+      response.statusText,
+    );
+  }
+
+  const data = await response.json();
+  return data;
+};
