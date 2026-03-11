@@ -91,6 +91,7 @@ export interface Event {
   id: string;
   name: string;
   description: string;
+  thumbnail?: string;
   banner?: string;
   dateStart: Date;
   dateEnd: Date;
