@@ -2,10 +2,11 @@
 import { useGetEvents } from "@/client/queries/eventQueries";
 import {
   useGetOrganizationParents,
+  useGetOrganizationsByOrganizationParent,
   useGetOrganizations,
 } from "@/client/queries/organizationQueries";
 import type { EventQueryParams } from "@/client/services/eventsService";
-import type { Event, OrganizationParent } from "@/client/types/entities";
+import type { Event, OrganizationChild, OrganizationParent } from "@/client/types/entities";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -14,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEffect, useRef, useState, Suspense } from "react";
+import { useEffect, useMemo, useRef, useState, Suspense } from "react";
 import { debounce } from "lodash";
 import { EventCard } from "@/components/EventCard";
 import {
@@ -43,6 +44,10 @@ const EventsContent = () => {
     useGetOrganizations();
   const { data: organizationParents, isLoading: isOrganizationParentsLoading } =
     useGetOrganizationParents();
+  const {
+    data: organizationsByOrganizationParent,
+    isLoading: isOrganizationsByOrganizationParentLoading,
+  } = useGetOrganizationsByOrganizationParent(filters.organizationParentId);
   const { data: events, isLoading: isEventsLoading } = useGetEvents(filters);
   const isFirstPage = events?.meta?.currentPage === 1;
   const isLastPage = events?.meta?.currentPage === events?.meta?.totalPages;
@@ -52,7 +57,11 @@ const EventsContent = () => {
 
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
-  const renderOrganizationParentOptions = organizationParents?.data?.map(
+  const clusterList: OrganizationParent[] = Array.isArray(organizationParents)
+    ? organizationParents
+    : organizationParents?.data ?? [];
+
+  const renderOrganizationParentOptions = clusterList.map(
     (orgParent: OrganizationParent) => (
       <SelectItem key={orgParent.id} value={orgParent.id}>
         {orgParent.name}
@@ -60,8 +69,33 @@ const EventsContent = () => {
     ),
   );
 
-  const renderOrganizationOptions = organizations?.data?.map(
-    (org: OrganizationParent) => (
+  const filteredOrganizations = useMemo(() => {
+    const allOrgs: OrganizationChild[] = organizations?.data ?? [];
+    if (!filters.organizationParentId) return allOrgs;
+
+    const scopedOrgs: OrganizationChild[] =
+      organizationsByOrganizationParent?.data?.map(
+        (group: { organizationChild: OrganizationChild }) =>
+          group.organizationChild,
+      ) ?? [];
+
+    return scopedOrgs;
+  }, [
+    organizations?.data,
+    organizationsByOrganizationParent?.data,
+    filters.organizationParentId,
+  ]);
+
+  const isOrganizationsFilterLoading =
+    isOrganizationsLoading ||
+    (Boolean(filters.organizationParentId) &&
+      isOrganizationsByOrganizationParentLoading);
+
+  const selectedOrganizationParent = filters.organizationParentId ?? "all";
+  const selectedOrganization = filters.organizationId ?? "all";
+
+  const renderOrganizationOptions = filteredOrganizations.map(
+    (org: OrganizationChild) => (
       <SelectItem key={org.id} value={org.id}>
         {org.name}
       </SelectItem>
@@ -73,12 +107,14 @@ const EventsContent = () => {
       setFilters((prev: EventQueryParams) => ({
         ...prev,
         organizationParentId: undefined,
+        organizationId: undefined,
         page: 1,
       }));
     } else {
       setFilters((prev: EventQueryParams) => ({
         ...prev,
         organizationParentId: value,
+        organizationId: undefined,
         page: 1,
       }));
     }
@@ -218,7 +254,10 @@ const EventsContent = () => {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <Select onValueChange={handleOrganizationParentFilter}>
+                  <Select
+                    value={selectedOrganizationParent}
+                    onValueChange={handleOrganizationParentFilter}
+                  >
                     <SelectTrigger className="w-full sm:w-[200px] h-11 border-2 border-gray-200 focus:border-blue-500 rounded-lg">
                       <SelectValue placeholder="Select Cluster" />
                     </SelectTrigger>
@@ -236,12 +275,16 @@ const EventsContent = () => {
                     </SelectContent>
                   </Select>
 
-                  <Select onValueChange={handleOrganizationChildFilter}>
+                  <Select
+                    key={selectedOrganizationParent}
+                    value={selectedOrganization}
+                    onValueChange={handleOrganizationChildFilter}
+                  >
                     <SelectTrigger className="w-full sm:w-[200px] h-11 border-2 border-gray-200 focus:border-blue-500 rounded-lg">
                       <SelectValue placeholder="Select Organization" />
                     </SelectTrigger>
                     <SelectContent>
-                      {isOrganizationsLoading ? (
+                      {isOrganizationsFilterLoading ? (
                         <SelectItem value="loading" disabled>
                           Loading...
                         </SelectItem>
@@ -276,7 +319,10 @@ const EventsContent = () => {
               {/* Mobile-only: collapsible filter panel */}
               <div className={`${isMobileFiltersOpen ? "block" : "hidden"} sm:hidden`}>
                 <div className="mt-4 p-4 rounded-2xl border-2 border-gray-200 bg-white/80 backdrop-blur shadow-sm space-y-4">
-                  <Select onValueChange={handleOrganizationParentFilter}>
+                  <Select
+                    value={selectedOrganizationParent}
+                    onValueChange={handleOrganizationParentFilter}
+                  >
                     <SelectTrigger className="w-full h-11 border-2 border-gray-200 focus:border-blue-500 rounded-lg">
                       <SelectValue placeholder="Select Cluster" />
                     </SelectTrigger>
@@ -294,12 +340,16 @@ const EventsContent = () => {
                     </SelectContent>
                   </Select>
 
-                  <Select onValueChange={handleOrganizationChildFilter}>
+                  <Select
+                    key={`mobile-${selectedOrganizationParent}`}
+                    value={selectedOrganization}
+                    onValueChange={handleOrganizationChildFilter}
+                  >
                     <SelectTrigger className="w-full h-11 border-2 border-gray-200 focus:border-blue-500 rounded-lg">
                       <SelectValue placeholder="Select Organization" />
                     </SelectTrigger>
                     <SelectContent>
-                      {isOrganizationsLoading ? (
+                      {isOrganizationsFilterLoading ? (
                         <SelectItem value="loading" disabled>
                           Loading...
                         </SelectItem>
