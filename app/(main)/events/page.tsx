@@ -274,7 +274,9 @@ const EventsContent = () => {
               </div>
 
               {/* Mobile-only: collapsible filter panel */}
-              <div className={`${isMobileFiltersOpen ? "block" : "hidden"} sm:hidden`}>
+              <div
+                className={`${isMobileFiltersOpen ? "block" : "hidden"} sm:hidden`}
+              >
                 <div className="mt-4 p-4 rounded-2xl border-2 border-gray-200 bg-white/80 backdrop-blur shadow-sm space-y-4">
                   <Select onValueChange={handleOrganizationParentFilter}>
                     <SelectTrigger className="w-full h-11 border-2 border-gray-200 focus:border-blue-500 rounded-lg">
@@ -357,6 +359,7 @@ const EventsContent = () => {
                 <EventCard
                   key={event.id}
                   id={event.id}
+                  imageUrl={event.thumbnail}
                   price={getEventPriceDisplay(event.TicketCategories)}
                   title={event.name}
                   organization={event.org?.name || ""}

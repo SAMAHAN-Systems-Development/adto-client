@@ -25,7 +25,7 @@ export default function Home() {
 
   // Dynamic carousel delay calculation
   const autoplayPlugin = useRef(
-    Autoplay({ delay: 4000, stopOnInteraction: true })
+    Autoplay({ delay: 4000, stopOnInteraction: true }),
   );
 
   useEffect(() => {
@@ -35,11 +35,14 @@ export default function Home() {
       let cardsVisible = 1;
 
       // These match the Tailwind breakpoints applied to CarouselItem
-      if (width >= 1280) { // xl
+      if (width >= 1280) {
+        // xl
         cardsVisible = 4;
-      } else if (width >= 1024) { // lg
+      } else if (width >= 1024) {
+        // lg
         cardsVisible = 3;
-      } else if (width >= 768) { // md
+      } else if (width >= 768) {
+        // md
         cardsVisible = 2;
       }
 
@@ -52,8 +55,8 @@ export default function Home() {
     };
 
     calculateDelay(); // Initial calc
-    window.addEventListener('resize', calculateDelay);
-    return () => window.removeEventListener('resize', calculateDelay);
+    window.addEventListener("resize", calculateDelay);
+    return () => window.removeEventListener("resize", calculateDelay);
   }, []);
 
   const FeaturedEventsSkeleton = () => (
@@ -75,7 +78,10 @@ export default function Home() {
       <HeroHeader />
 
       {/* Featured Events Section */}
-      <section id="featured-events" className="min-h-[100dvh] pt-16 md:pt-24 pb-0 px-8 lg:px-24 relative overflow-hidden flex flex-col justify-center">
+      <section
+        id="featured-events"
+        className="min-h-[100dvh] pt-16 md:pt-24 pb-0 px-8 lg:px-24 relative overflow-hidden flex flex-col justify-center"
+      >
         {/* Background decoration */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-100/40 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-sky-100/40 rounded-full blur-3xl pointer-events-none" />
@@ -128,20 +134,21 @@ export default function Home() {
                           organization={event.org?.name || ""}
                           dateRange={`${formatDate(
                             event.dateStart,
-                            "MMM dd, yyyy"
+                            "MMM dd, yyyy",
                           )} to ${formatDate(event.dateEnd, "MMM dd, yyyy")}`}
                           timeRange={`${new Date(
-                            event.dateStart
+                            event.dateStart,
                           ).toLocaleTimeString("en-US", {
                             hour: "numeric",
                             minute: "2-digit",
-                          })} to ${new Date(
-                            event.dateEnd
-                          ).toLocaleTimeString("en-US", {
-                            hour: "numeric",
-                            minute: "2-digit",
-                          })}`}
-                          imageUrl=""
+                          })} to ${new Date(event.dateEnd).toLocaleTimeString(
+                            "en-US",
+                            {
+                              hour: "numeric",
+                              minute: "2-digit",
+                            },
+                          )}`}
+                          imageUrl={event.thumbnail}
                         />
                       </div>
                     </CarouselItem>
