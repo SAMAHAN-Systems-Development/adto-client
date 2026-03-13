@@ -78,6 +78,7 @@ export interface TicketCategory {
   id: string;
   name: string;
   description: string;
+  thumbnail?: string;
   price: number;
   capacity: number;
   registrationDeadline: Date;
