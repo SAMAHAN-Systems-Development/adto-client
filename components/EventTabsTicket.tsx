@@ -5,6 +5,7 @@ import { EventRegistrationModal } from "./EventRegistrationModal";
 import { Button } from "./ui/button";
 
 export type TicketCardProps = {
+  ticketId: string;
   availableCapacity?: number; // e.g. "10 tickets left"
   event: Event;
   name: string;
@@ -17,6 +18,7 @@ export type TicketCardProps = {
 };
 
 export default function TicketCard({
+  ticketId,
   availableCapacity,
   event,
   name,
@@ -24,7 +26,7 @@ export default function TicketCard({
   description = "",
   imageSrc = "/placeholder.jpg",
   detailsHref,
-  buttonText = "Details",
+  buttonText = "Register",
 }: TicketCardProps) {
   const ButtonContent = (
     <span className="inline-flex h-10 w-full items-center justify-center rounded-md bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700">
@@ -37,14 +39,18 @@ export default function TicketCard({
     name: string;
   } | null>(null);
 
+  const normalizedDetailsHref = detailsHref?.trim()
+    ? /^(https?:)?\/\//i.test(detailsHref.trim())
+      ? detailsHref.trim()
+      : `https://${detailsHref.trim()}`
+    : undefined;
+
   const handleRegisterClick = () => {
-    if (event.TicketCategories?.[0]) {
-      setSelectedTicketCategory({
-        id: event.TicketCategories[0].id,
-        name: event.TicketCategories[0].name,
-      });
-      setRegistrationModalOpen(true);
-    }
+    setSelectedTicketCategory({
+      id: ticketId,
+      name,
+    });
+    setRegistrationModalOpen(true);
   };
 
   return (
@@ -65,7 +71,9 @@ export default function TicketCard({
       <div className="p-5">
         <h3 className="text-lg font-bold text-gray-900">{name}</h3>
         <p className="mt-1 text-sm font-medium text-gray-500">
-          ₱{price?.toFixed(2) ?? "0.00"}
+          {price === 0 || price === undefined
+            ? "Free"
+            : `₱${price.toFixed(2)}`}
         </p>
 
         {description ? (
@@ -78,40 +86,38 @@ export default function TicketCard({
           </p>
         )}
 
-        <div className="mt-5">
+        <div className="mt-8 flex justify-center md:justify-end">
           {availableCapacity !== 0 ? (
-            detailsHref ? (
-              <a href={detailsHref}>{ButtonContent}</a>
+            normalizedDetailsHref ? (
+              <a
+                href={normalizedDetailsHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full"
+              >
+                {ButtonContent}
+              </a>
             ) : price === 0 ? (
-              <div className="flex justify-center md:justify-end mt-8">
-                <Button
-                  size="lg"
-                  onClick={handleRegisterClick}
-                  disabled={
-                    !event.isRegistrationOpen ||
-                    (event.isRegistrationRequired &&
-                      !event.TicketCategories?.[0])
-                  }
-                  className="inline-flex h-10 w-full items-center justify-center rounded-md bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700"
-                >
-                  {event.isRegistrationOpen
-                    ? "Register"
-                    : "Registration Closed"}
-                </Button>
-              </div>
+              <Button
+                size="lg"
+                onClick={handleRegisterClick}
+                disabled={
+                  !event.isRegistrationOpen ||
+                  (event.isRegistrationRequired && !ticketId)
+                }
+                className="inline-flex h-10 w-full items-center justify-center rounded-md bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700"
+              >
+                {event.isRegistrationOpen ? "Register" : "Registration Closed"}
+              </Button>
             ) : (
-              <div className="flex justify-center md:justify-end mt-8">
-                <span className="inline-flex h-10 w-full items-center justify-center rounded-md bg-blue-400 px-4 text-sm font-semibold text-white transition hover:bg-blue-700">
-                  {"unavailable"}
-                </span>
-              </div>
+              <span className="inline-flex h-10 w-full items-center justify-center rounded-md bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700">
+                {"Unavailable"}
+              </span>
             )
           ) : (
-            <div className="flex justify-center md:justify-end mt-8">
-              <span className="inline-flex h-10 w-full items-center justify-center rounded-md bg-gray-400 px-4 text-sm font-semibold text-white transition hover:bg-gray-500">
-                {"Sold Out"}
-              </span>
-            </div>
+            <span className="inline-flex h-10 w-full items-center justify-center rounded-md bg-gray-400 px-4 text-sm font-semibold text-white transition hover:bg-gray-500">
+              {"Sold Out"}
+            </span>
           )}
         </div>
       </div>
