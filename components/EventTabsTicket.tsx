@@ -1,21 +1,26 @@
 import Image from "next/image";
+import { Event } from "@/client/types/entities";
+import { useState } from "react";
+import { EventRegistrationModal } from "./EventRegistrationModal";
+import { Button } from "./ui/button";
 
 export type TicketCardProps = {
+  event: Event;
   name: string;
-  price?: number;        // e.g. "Ticket Price"
+  price?: number; // e.g. "Ticket Price"
   description?: string;
-  imageSrc?: string;          // URL or local path
-  onDetails?: () => void;     // if you want a modal later
-  detailsHref?: string;       // if you want a page route
-  buttonText?: string;        // default "Details"
+  imageSrc?: string; // URL or local path
+  onDetails?: () => void; // if you want a modal later
+  detailsHref?: string; // if you want a page route
+  buttonText?: string; // default "Details"
 };
 
 export default function TicketCard({
+  event,
   name,
   price,
   description = "",
   imageSrc = "/placeholder.jpg",
-  onDetails,
   detailsHref,
   buttonText = "Details",
 }: TicketCardProps) {
@@ -24,6 +29,21 @@ export default function TicketCard({
       {buttonText}
     </span>
   );
+  const [registrationModalOpen, setRegistrationModalOpen] = useState(false);
+  const [selectedTicketCategory, setSelectedTicketCategory] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+
+  const handleRegisterClick = () => {
+    if (event.TicketCategories?.[0]) {
+      setSelectedTicketCategory({
+        id: event.TicketCategories[0].id,
+        name: event.TicketCategories[0].name,
+      });
+      setRegistrationModalOpen(true);
+    }
+  };
 
   return (
     <div className="w-full overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-gray-100">
@@ -42,10 +62,14 @@ export default function TicketCard({
       {/* Content */}
       <div className="p-5">
         <h3 className="text-lg font-bold text-gray-900">{name}</h3>
-        <p className="mt-1 text-sm font-medium text-gray-500">₱{price?.toFixed(2) ?? "0.00"}</p>
+        <p className="mt-1 text-sm font-medium text-gray-500">
+          ₱{price?.toFixed(2) ?? "0.00"}
+        </p>
 
         {description ? (
-          <p className="mt-3 line-clamp-3 text-sm text-gray-500">{description}</p>
+          <p className="mt-3 line-clamp-3 text-sm text-gray-500">
+            {description}
+          </p>
         ) : (
           <p className="mt-3 line-clamp-3 text-sm text-gray-400">
             No description provided.
@@ -55,13 +79,43 @@ export default function TicketCard({
         <div className="mt-5">
           {detailsHref ? (
             <a href={detailsHref}>{ButtonContent}</a>
+          ) : price === 0 ? (
+            <div className="flex justify-center md:justify-end mt-8">
+              <Button
+                size="lg"
+                onClick={handleRegisterClick}
+                disabled={
+                  !event.isRegistrationOpen ||
+                  (event.isRegistrationRequired && !event.TicketCategories?.[0])
+                }
+                className="inline-flex h-10 w-full items-center justify-center rounded-md bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700"
+              >
+                {event.isRegistrationOpen ? "Register" : "Registration Closed"}
+              </Button>
+            </div>
           ) : (
-            <button type="button" onClick={onDetails} className="w-full">
-              {ButtonContent}
-            </button>
+            <div className="flex justify-center md:justify-end mt-8">
+              <span className="inline-flex h-10 w-full items-center justify-center rounded-md bg-blue-400 px-4 text-sm font-semibold text-white transition hover:bg-blue-700">
+                {"unavailable"}
+              </span>
+            </div>
           )}
         </div>
       </div>
+
+      {selectedTicketCategory && (
+        <EventRegistrationModal
+          isOpen={registrationModalOpen}
+          onClose={() => {
+            setRegistrationModalOpen(false);
+            setSelectedTicketCategory(null);
+          }}
+          eventId={event.id}
+          eventName={event.name}
+          ticketCategoryId={selectedTicketCategory.id}
+          ticketCategoryName={selectedTicketCategory.name}
+        />
+      )}
     </div>
   );
 }

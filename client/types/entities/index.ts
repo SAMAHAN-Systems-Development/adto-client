@@ -74,6 +74,25 @@ export interface Registration {
   updatedAt: Date;
 }
 
+export enum TicketRequestStatus {
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  DECLINED = "DECLINED",
+}
+
+export interface TicketRequests {
+  id: string;
+  ticketId: string;
+  ticket: TicketCategory;
+  orgId: string;
+  org: OrganizationChild;
+  createdAt: Date;
+  updatedAt: Date;
+  status: TicketRequestStatus;
+  ticketLink?: string | null;
+  declineReason?: string | null;
+}
+
 export interface TicketCategory {
   id: string;
   name: string;

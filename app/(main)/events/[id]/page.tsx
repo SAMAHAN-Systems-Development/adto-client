@@ -9,18 +9,20 @@ import { ArrowLeft, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
-import { EventRegistrationModal } from "@/components/EventRegistrationModal";
+// import { EventRegistrationModal } from "@/components/EventRegistrationModal";
 import { getEventPriceDisplay } from "@/lib/utils/event-priceUtils";
 import Tabs from "@/components/EventTabs";
 
 const EventDetailsPage = ({ params }: { params: { id: string } }) => {
   const { id } = params;
+  console.log("Event ID from URL:", id);
   const { data: event, isLoading, error } = useGetEventById(id);
-  const [registrationModalOpen, setRegistrationModalOpen] = useState(false);
-  const [selectedTicketCategory, setSelectedTicketCategory] = useState<{
-    id: string;
-    name: string;
-  } | null>(null);
+  console.log("Fetched Event Data:", event);
+  // const [registrationModalOpen, setRegistrationModalOpen] = useState(false);
+  // const [selectedTicketCategory, setSelectedTicketCategory] = useState<{
+  //   id: string;
+  //   name: string;
+  // } | null>(null);
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   // Loading state
@@ -86,15 +88,15 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
       ? `${event.description.substring(0, 400)}...`
       : event.description;
 
-  const handleRegisterClick = () => {
-    if (event.TicketCategories?.[0]) {
-      setSelectedTicketCategory({
-        id: event.TicketCategories[0].id,
-        name: event.TicketCategories[0].name,
-      });
-      setRegistrationModalOpen(true);
-    }
-  };
+  // const handleRegisterClick = () => {
+  //   if (event.TicketCategories?.[0]) {
+  //     setSelectedTicketCategory({
+  //       id: event.TicketCategories[0].id,
+  //       name: event.TicketCategories[0].name,
+  //     });
+  //     setRegistrationModalOpen(true);
+  //   }
+  // };
 
   return (
     <div className="min-h-screen bg-white">
@@ -208,8 +210,11 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
             )}
           </div>
 
-          {/* Register Button - Right aligned */}
-          <div className="flex justify-center md:justify-end mt-8">
+          {/* 
+              FOR NOW REMOVE MUNA ITO
+              Register Button - Right aligned 
+          */}
+          {/* <div className="flex justify-center md:justify-end mt-8">
             <Button
               size="lg"
               onClick={handleRegisterClick}
@@ -221,17 +226,20 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
             >
               {event.isRegistrationOpen ? "Register" : "Registration Closed"}
             </Button>
-          </div>
+          </div> */}
         </div>
         <section className="py-20 relative overflow-hidden">
           <div className="pt-30">
-            <Tabs eventId={id} />
+            <Tabs event={event} />
           </div>
         </section>
       </div>
 
-      {/* Registration Modal */}
-      {selectedTicketCategory && (
+      {/* 
+          FOR NOW REMOVE MUNA ITO
+          Registration Modal 
+      */}
+      {/* {selectedTicketCategory && (
         <EventRegistrationModal
           isOpen={registrationModalOpen}
           onClose={() => {
@@ -243,7 +251,7 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
           ticketCategoryId={selectedTicketCategory.id}
           ticketCategoryName={selectedTicketCategory.name}
         />
-      )}
+      )} */}
     </div>
   );
 };
