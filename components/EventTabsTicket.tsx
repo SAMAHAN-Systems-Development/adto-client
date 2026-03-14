@@ -5,6 +5,7 @@ import { EventRegistrationModal } from "./EventRegistrationModal";
 import { Button } from "./ui/button";
 
 export type TicketCardProps = {
+  availableCapacity?: number; // e.g. "10 tickets left"
   event: Event;
   name: string;
   price?: number; // e.g. "Ticket Price"
@@ -16,6 +17,7 @@ export type TicketCardProps = {
 };
 
 export default function TicketCard({
+  availableCapacity,
   event,
   name,
   price,
@@ -77,26 +79,37 @@ export default function TicketCard({
         )}
 
         <div className="mt-5">
-          {detailsHref ? (
-            <a href={detailsHref}>{ButtonContent}</a>
-          ) : price === 0 ? (
-            <div className="flex justify-center md:justify-end mt-8">
-              <Button
-                size="lg"
-                onClick={handleRegisterClick}
-                disabled={
-                  !event.isRegistrationOpen ||
-                  (event.isRegistrationRequired && !event.TicketCategories?.[0])
-                }
-                className="inline-flex h-10 w-full items-center justify-center rounded-md bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700"
-              >
-                {event.isRegistrationOpen ? "Register" : "Registration Closed"}
-              </Button>
-            </div>
+          {availableCapacity !== 0 ? (
+            detailsHref ? (
+              <a href={detailsHref}>{ButtonContent}</a>
+            ) : price === 0 ? (
+              <div className="flex justify-center md:justify-end mt-8">
+                <Button
+                  size="lg"
+                  onClick={handleRegisterClick}
+                  disabled={
+                    !event.isRegistrationOpen ||
+                    (event.isRegistrationRequired &&
+                      !event.TicketCategories?.[0])
+                  }
+                  className="inline-flex h-10 w-full items-center justify-center rounded-md bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700"
+                >
+                  {event.isRegistrationOpen
+                    ? "Register"
+                    : "Registration Closed"}
+                </Button>
+              </div>
+            ) : (
+              <div className="flex justify-center md:justify-end mt-8">
+                <span className="inline-flex h-10 w-full items-center justify-center rounded-md bg-blue-400 px-4 text-sm font-semibold text-white transition hover:bg-blue-700">
+                  {"unavailable"}
+                </span>
+              </div>
+            )
           ) : (
             <div className="flex justify-center md:justify-end mt-8">
-              <span className="inline-flex h-10 w-full items-center justify-center rounded-md bg-blue-400 px-4 text-sm font-semibold text-white transition hover:bg-blue-700">
-                {"unavailable"}
+              <span className="inline-flex h-10 w-full items-center justify-center rounded-md bg-gray-400 px-4 text-sm font-semibold text-white transition hover:bg-gray-500">
+                {"Sold Out"}
               </span>
             </div>
           )}

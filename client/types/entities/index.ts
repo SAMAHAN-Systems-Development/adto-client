@@ -104,6 +104,7 @@ export interface TicketCategory {
   eventId: string;
   event: Event;
   registrations: Registration[];
+  availableCapacity?: number;
 }
 
 export interface Event {

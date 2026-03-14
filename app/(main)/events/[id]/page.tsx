@@ -9,20 +9,12 @@ import { ArrowLeft, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
-// import { EventRegistrationModal } from "@/components/EventRegistrationModal";
 import { getEventPriceDisplay } from "@/lib/utils/event-priceUtils";
 import Tabs from "@/components/EventTabs";
 
 const EventDetailsPage = ({ params }: { params: { id: string } }) => {
   const { id } = params;
-  console.log("Event ID from URL:", id);
   const { data: event, isLoading, error } = useGetEventById(id);
-  console.log("Fetched Event Data:", event);
-  // const [registrationModalOpen, setRegistrationModalOpen] = useState(false);
-  // const [selectedTicketCategory, setSelectedTicketCategory] = useState<{
-  //   id: string;
-  //   name: string;
-  // } | null>(null);
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   // Loading state
@@ -87,16 +79,6 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
     event.description?.length > 400 && !showFullDescription
       ? `${event.description.substring(0, 400)}...`
       : event.description;
-
-  // const handleRegisterClick = () => {
-  //   if (event.TicketCategories?.[0]) {
-  //     setSelectedTicketCategory({
-  //       id: event.TicketCategories[0].id,
-  //       name: event.TicketCategories[0].name,
-  //     });
-  //     setRegistrationModalOpen(true);
-  //   }
-  // };
 
   return (
     <div className="min-h-screen bg-white">
@@ -209,24 +191,6 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
               </button>
             )}
           </div>
-
-          {/* 
-              FOR NOW REMOVE MUNA ITO
-              Register Button - Right aligned 
-          */}
-          {/* <div className="flex justify-center md:justify-end mt-8">
-            <Button
-              size="lg"
-              onClick={handleRegisterClick}
-              disabled={
-                !event.isRegistrationOpen ||
-                (event.isRegistrationRequired && !event.TicketCategories?.[0])
-              }
-              className="text-sm px-16 py-6 md:text-lg font-semibold rounded-lg bg-blue-600 hover:bg-blue-700"
-            >
-              {event.isRegistrationOpen ? "Register" : "Registration Closed"}
-            </Button>
-          </div> */}
         </div>
         <section className="py-20 relative overflow-hidden">
           <div className="pt-30">
@@ -234,24 +198,6 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
           </div>
         </section>
       </div>
-
-      {/* 
-          FOR NOW REMOVE MUNA ITO
-          Registration Modal 
-      */}
-      {/* {selectedTicketCategory && (
-        <EventRegistrationModal
-          isOpen={registrationModalOpen}
-          onClose={() => {
-            setRegistrationModalOpen(false);
-            setSelectedTicketCategory(null);
-          }}
-          eventId={id}
-          eventName={event.name}
-          ticketCategoryId={selectedTicketCategory.id}
-          ticketCategoryName={selectedTicketCategory.name}
-        />
-      )} */}
     </div>
   );
 };

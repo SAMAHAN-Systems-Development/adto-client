@@ -89,6 +89,7 @@ export default function EventTabs({ event }: { event: Event }) {
 
           return (
             <Tickets
+              availableCapacity={ticket.availableCapacity}
               event={event}
               key={id}
               name={name}
