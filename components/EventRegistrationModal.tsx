@@ -7,7 +7,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { EventRegistrationForm, RegistrationFormData } from "./EventRegistrationForm";
+import {
+  EventRegistrationForm,
+  RegistrationFormData,
+} from "./EventRegistrationForm";
 import { useCreateRegistration } from "@/client/mutations/registrationMutation";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
@@ -24,6 +27,7 @@ interface EventRegistrationModalProps {
 export function EventRegistrationModal({
   isOpen,
   onClose,
+  eventId,
   eventName,
   ticketCategoryId,
   ticketCategoryName,
@@ -45,14 +49,15 @@ export function EventRegistrationModal({
 
       toast({
         title: "Registration Successful!",
-        description: "Your registration has been submitted. Check your email for confirmation.",
+        description:
+          "Your registration has been submitted. Check your email for confirmation.",
         variant: "default",
       });
 
       onClose();
 
       // Redirect to a success page or back to events list
-      router.push("/events");
+      router.push(`/events/${eventId}`);
     } catch (error) {
       toast({
         title: "Registration Failed",
