@@ -5,12 +5,12 @@ import Tickets from "@/components/EventTabsTicket";
 import Announcements from "@/components/EventTabsAnnouncements";
 import { useGetEventTickets } from "@/client/queries/eventTabTicketQueries";
 import { useGetEventAnnouncements } from "@/client/queries/eventTabAnnouncementQueries";
-import { EventTabTicketParams } from "@/client/services/eventTabTicketService";
 import { TicketCategory } from "@/client/types/entities";
+import { Event } from "@/client/types/entities";
 
 type Tab = "tickets" | "announcements";
 
-export default function EventTabs({ eventId }: EventTabTicketParams) {
+export default function EventTabs({ event }: { event: Event }) {
   const [activeTab, setActiveTab] = useState<Tab>("tickets");
   const [mobileExpanded, setMobileExpanded] = useState<Tab | null>("tickets");
 
@@ -18,13 +18,13 @@ export default function EventTabs({ eventId }: EventTabTicketParams) {
     data: ticketsData,
     isLoading: ticketsLoading,
     isError: ticketsError,
-  } = useGetEventTickets({ eventId });
+  } = useGetEventTickets({ eventId: event.id });
 
   const {
     data: announcementsData,
     isLoading: announcementsLoading,
     isError: announcementsError,
-  } = useGetEventAnnouncements({ eventId });
+  } = useGetEventAnnouncements({ eventId: event.id });
 
   function EmptyState({
     title,
@@ -89,12 +89,14 @@ export default function EventTabs({ eventId }: EventTabTicketParams) {
 
           return (
             <Tickets
+              availableCapacity={ticket.availableCapacity}
+              event={event}
               key={id}
               name={name}
               price={price}
               description={description}
               imageSrc={imageSrc}
-              detailsHref={`/tickets/${id}`}
+              detailsHref={list.ticketLinks}
             />
           );
         })}
