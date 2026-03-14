@@ -89,6 +89,7 @@ export default function EventTabs({ event }: { event: Event }) {
 
           return (
             <Tickets
+              ticketId={id}
               availableCapacity={ticket.availableCapacity}
               event={event}
               key={id}
@@ -96,7 +97,7 @@ export default function EventTabs({ event }: { event: Event }) {
               price={price}
               description={description}
               imageSrc={imageSrc}
-              detailsHref={list.ticketLinks}
+              detailsHref={ticket.ticketLinks?.[0]}
             />
           );
         })}
