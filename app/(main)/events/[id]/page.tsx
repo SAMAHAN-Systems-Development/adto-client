@@ -99,12 +99,14 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
             <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800" />
           )}
 
-          {/* Event Title Overlay - Yellow Text */}
-          <div className="absolute inset-0 flex items-center justify-center px-8">
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-yellow-400 text-center drop-shadow-2xl leading-tight">
-              {event.name}
-            </h1>
-          </div>
+          {/* Event Title Overlay - Yellow Text (only when no banner image) */}
+          {!event.banner && (
+            <div className="absolute inset-0 flex items-center justify-center px-8">
+              <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-yellow-400 text-center drop-shadow-2xl leading-tight">
+                {event.name}
+              </h1>
+            </div>
+          )}
 
           {/* Tag Pills at Bottom Right */}
           <div className="absolute bottom-6 md:right-6 flex flex-wrap gap-3 justify-center md:justify-end">
@@ -114,12 +116,12 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
                 Registration Required
               </Badge>
             )}
-            {!event.isOpenToOutsiders && (
+            {/* {!event.isOpenToOutsiders && (
               <Badge className="bg-white text-blue-600 hover:bg-white px-2 md:px-4 py-2 text-xs md:text-sm font-medium shadow-lg">
                 <span className="mr-2">👥</span>
                 Open For SAMAHAN SysDev Members
               </Badge>
-            )}
+            )} */}
             {event.isOpenToOutsiders && (
               <Badge className="bg-white text-green-600 hover:bg-white px-4 py-2 text-sm font-medium shadow-lg">
                 <span className="mr-2">🌍</span>
