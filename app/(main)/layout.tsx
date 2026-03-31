@@ -2,6 +2,7 @@ import NavigationBar from "@/components/ui/NavigationBar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://samahan.addu.edu.ph/adto"),
   icons: {
     icon: "/images/ADTO2_Blue.svg",
   },
