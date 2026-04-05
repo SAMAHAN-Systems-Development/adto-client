@@ -88,7 +88,15 @@ export default function TicketCard({
 
         <div className="mt-8 flex justify-center md:justify-end">
           {availableCapacity !== 0 ? (
-            normalizedDetailsHref ? (
+            !event.isRegistrationOpen ? (
+              <Button
+                size="lg"
+                disabled
+                className="inline-flex h-10 w-full items-center justify-center rounded-md bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700"
+              >
+                Registration Closed
+              </Button>
+            ) : normalizedDetailsHref ? (
               <a
                 href={normalizedDetailsHref}
                 target="_blank"
@@ -102,12 +110,11 @@ export default function TicketCard({
                 size="lg"
                 onClick={handleRegisterClick}
                 disabled={
-                  !event.isRegistrationOpen ||
-                  (event.isRegistrationRequired && !ticketId)
+                  event.isRegistrationRequired && !ticketId
                 }
                 className="inline-flex h-10 w-full items-center justify-center rounded-md bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700"
               >
-                {event.isRegistrationOpen ? "Register" : "Registration Closed"}
+                Register
               </Button>
             ) : (
               <span className="inline-flex h-10 w-full items-center justify-center rounded-md bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700">
