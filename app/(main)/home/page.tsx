@@ -18,6 +18,7 @@ import { formatDate } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar, ArrowRight, Sparkles, Users } from "lucide-react";
 import Autoplay from "embla-carousel-autoplay";
+import { getEventPriceDisplay } from "@/lib/utils/event-priceUtils";
 
 export default function Home() {
   const { data: featuredEvents, isLoading: isFeaturedEventsLoading } =
@@ -149,6 +150,7 @@ export default function Home() {
                             },
                           )}`}
                           imageUrl={event.thumbnail}
+                          price={getEventPriceDisplay(event.TicketCategories)}
                         />
                       </div>
                     </CarouselItem>

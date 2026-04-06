@@ -9,6 +9,7 @@ export interface CreateRegistrationPayload {
   course: string;
   yearLevel: string;
   ticketCategoryId: string;
+  hasRsvpd?: boolean;
 }
 
 export interface RegistrationResponse {

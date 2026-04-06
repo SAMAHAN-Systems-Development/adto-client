@@ -140,6 +140,7 @@ export default function TicketCard({
           eventName={event.name}
           ticketCategoryId={selectedTicketCategory.id}
           ticketCategoryName={selectedTicketCategory.name}
+          isRsvpEnabled={event.isRsvpEnabled}
         />
       )}
     </div>
