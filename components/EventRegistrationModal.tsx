@@ -22,6 +22,7 @@ interface EventRegistrationModalProps {
   eventName: string;
   ticketCategoryId: string;
   ticketCategoryName?: string;
+  isRsvpEnabled?: boolean;
 }
 
 export function EventRegistrationModal({
@@ -31,6 +32,7 @@ export function EventRegistrationModal({
   eventName,
   ticketCategoryId,
   ticketCategoryName,
+  isRsvpEnabled,
 }: EventRegistrationModalProps) {
   const { toast } = useToast();
   const router = useRouter();
@@ -45,6 +47,7 @@ export function EventRegistrationModal({
         course: formData.course,
         yearLevel: formData.yearLevel,
         ticketCategoryId,
+        ...(isRsvpEnabled && { hasRsvpd: formData.hasRsvpd ?? false }),
       });
 
       toast({
@@ -82,6 +85,7 @@ export function EventRegistrationModal({
         <EventRegistrationForm
           onSubmit={handleSubmit}
           isSubmitting={createRegistrationMutation.isPending}
+          isRsvpEnabled={isRsvpEnabled}
         />
       </DialogContent>
     </Dialog>

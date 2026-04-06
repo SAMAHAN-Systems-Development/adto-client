@@ -121,6 +121,7 @@ const formSchema = z.object({
   yearLevel: z.string().min(1, {
     message: "Please select your year level.",
   }),
+  hasRsvpd: z.boolean().optional(),
   dataPrivacyConsent: z.boolean().refine((val) => val === true, {
     message: "You must agree to the Data Privacy Policy to proceed.",
   }),
@@ -131,6 +132,7 @@ export type RegistrationFormData = z.infer<typeof formSchema>;
 interface EventRegistrationFormProps {
   onSubmit: (data: RegistrationFormData) => Promise<void>;
   isSubmitting?: boolean;
+  isRsvpEnabled?: boolean;
 }
 
 const yearLevels = [
@@ -144,6 +146,7 @@ const yearLevels = [
 export function EventRegistrationForm({
   onSubmit,
   isSubmitting = false,
+  isRsvpEnabled = false,
 }: EventRegistrationFormProps) {
   const form = useForm<RegistrationFormData>({
     resolver: zodResolver(formSchema),
@@ -153,6 +156,7 @@ export function EventRegistrationForm({
       cluster: "",
       course: "",
       yearLevel: "",
+      hasRsvpd: false,
       dataPrivacyConsent: false,
     },
   });
@@ -325,6 +329,34 @@ export function EventRegistrationForm({
                 </FormItem>
               )}
             />
+
+            {isRsvpEnabled && (
+              <div className="border-t pt-6 mt-6">
+                <FormField
+                  control={form.control}
+                  name="hasRsvpd"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-lg border border-blue-100 bg-blue-50/50 p-4">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          disabled={isSubmitting}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel className="text-sm font-semibold text-gray-900 cursor-pointer">
+                          RSVP - Confirm Attendance
+                        </FormLabel>
+                        <FormDescription className="text-sm text-gray-600">
+                          I confirm that I will attend this event.
+                        </FormDescription>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
 
             <div className="border-t pt-6 mt-6">
               <div className="space-y-3">

@@ -68,6 +68,7 @@ export interface Registration {
   cluster: string;
   confirmedAt?: Date;
   isAttended: boolean;
+  hasRsvpd: boolean;
   ticketCategoryId: string;
   ticketCategory: TicketCategory;
   createdAt: Date;
@@ -120,6 +121,7 @@ export interface Event {
   isRegistrationRequired: boolean;
   isOpenToOutsiders: boolean;
   isPublished?: boolean;
+  isRsvpEnabled?: boolean;
   bannerImage?: string;
   venue?: string;
   orgId: string;
