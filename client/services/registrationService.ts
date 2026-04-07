@@ -10,6 +10,8 @@ export interface CreateRegistrationPayload {
   yearLevel: string;
   ticketCategoryId: string;
   hasRsvpd?: boolean;
+  organizationParentId?: string;
+  organizationChildId?: string;
 }
 
 export interface RegistrationResponse {

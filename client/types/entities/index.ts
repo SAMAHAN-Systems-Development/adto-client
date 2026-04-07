@@ -69,6 +69,10 @@ export interface Registration {
   confirmedAt?: Date;
   isAttended: boolean;
   hasRsvpd: boolean;
+  organizationParentId?: string;
+  organizationParent?: OrganizationParent;
+  organizationChildId?: string;
+  organizationChild?: OrganizationChild;
   ticketCategoryId: string;
   ticketCategory: TicketCategory;
   createdAt: Date;
