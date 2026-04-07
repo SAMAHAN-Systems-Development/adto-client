@@ -35,7 +35,7 @@ export default function NavigationBar() {
             <Link href="/" className="flex-shrink-0 group">
               <div className="relative p-2 rounded-xl transition-all duration-200 group-hover:bg-gray-50">
                 <Image
-                  src="/images/ADTO2_Blue.svg"
+                  src="https://samahan.addu.edu.ph/adto/images/ADTO2_Blue.svg"
                   alt="Adto Logo"
                   width={45}
                   height={45}
@@ -46,22 +46,27 @@ export default function NavigationBar() {
 
             <div className="hidden md:flex items-center space-x-1">
               {navBarLinks.map((value, index) => {
-                const isActive = value.link === "/home"
-                  ? pathname === "/home" || pathname === "/"
-                  : pathname.startsWith(value.link);
+                const isActive =
+                  value.link === "/home"
+                    ? pathname === "/home" || pathname === "/"
+                    : pathname.startsWith(value.link);
                 return (
                   <Link
                     key={index}
                     href={value.link}
-                    className={`relative px-4 py-2 font-medium rounded-lg transition-all duration-200 group ${isActive
-                      ? "text-blue-600 bg-blue-50"
-                      : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-                      }`}
+                    className={`relative px-4 py-2 font-medium rounded-lg transition-all duration-200 group ${
+                      isActive
+                        ? "text-blue-600 bg-blue-50"
+                        : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                    }`}
                   >
                     {value.title}
                     <span
-                      className={`absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 transform transition-transform duration-200 ${isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
-                        }`}
+                      className={`absolute inset-x-0 bottom-0 h-0.5 bg-blue-600 transform transition-transform duration-200 ${
+                        isActive
+                          ? "scale-x-100"
+                          : "scale-x-0 group-hover:scale-x-100"
+                      }`}
                     />
                   </Link>
                 );
@@ -70,7 +75,6 @@ export default function NavigationBar() {
           </div>
 
           <div className="flex items-center space-x-3">
-
             <div className="relative md:hidden" ref={menuRef}>
               <button
                 onClick={handleMenuClick}
@@ -83,17 +87,19 @@ export default function NavigationBar() {
                 <div className="absolute top-full right-0 mt-2 w-64 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden animate-in slide-in-from-top-2 duration-200">
                   <div className="p-2">
                     {navBarLinks.map((value, index) => {
-                      const isActive = value.link === "/home"
-                        ? pathname === "/home" || pathname === "/"
-                        : pathname.startsWith(value.link);
+                      const isActive =
+                        value.link === "/home"
+                          ? pathname === "/home" || pathname === "/"
+                          : pathname.startsWith(value.link);
                       return (
                         <Link
                           key={index}
                           href={value.link}
-                          className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${isActive
-                            ? "text-blue-600 bg-blue-50 font-semibold"
-                            : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
-                            }`}
+                          className={`flex items-center px-4 py-3 rounded-lg transition-all duration-200 ${
+                            isActive
+                              ? "text-blue-600 bg-blue-50 font-semibold"
+                              : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
+                          }`}
                           onClick={() => setIsMenuOpen(false)}
                         >
                           <span className="font-medium">{value.title}</span>

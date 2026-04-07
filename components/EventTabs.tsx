@@ -76,7 +76,8 @@ export default function EventTabs({ event }: { event: Event }) {
           subtitle="Check back later or contact the organizer"
         />
       );
-    const defaultImage = "/images/ADTO2_Blue.svg";
+    const defaultImage =
+      "https://samahan.addu.edu.ph/adto/images/ADTO2_Blue.svg";
 
     return (
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
