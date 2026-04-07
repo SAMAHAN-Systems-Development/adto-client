@@ -24,6 +24,10 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, UserCheck } from "lucide-react";
+import {
+  useGetOrganizationParents,
+  useGetOrganizationsByOrganizationParent,
+} from "@/client/queries/organizationQueries";
 
 const CLUSTERS_AND_PROGRAMS: Record<string, string[]> = {
   "Accountancy": [
@@ -112,6 +116,8 @@ const formSchema = z.object({
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
+  organizationGroupId: z.string().optional(),
+  organizationId: z.string().optional(),
   cluster: z.string().min(1, {
     message: "Please select a cluster.",
   }),
@@ -153,6 +159,8 @@ export function EventRegistrationForm({
     defaultValues: {
       fullName: "",
       email: "",
+      organizationGroupId: "",
+      organizationId: "",
       cluster: "",
       course: "",
       yearLevel: "",
@@ -163,6 +171,23 @@ export function EventRegistrationForm({
 
   const selectedCluster = form.watch("cluster");
   const availableCourses = selectedCluster ? CLUSTERS_AND_PROGRAMS[selectedCluster] : [];
+  const selectedOrganizationGroup = form.watch("organizationGroupId");
+
+  const { data: organizationParentsResponse, isLoading: isOrganizationParentsLoading } =
+    useGetOrganizationParents();
+  const {
+    data: organizationsByParentResponse,
+    isLoading: isOrganizationsByParentLoading,
+  } = useGetOrganizationsByOrganizationParent(selectedOrganizationGroup || undefined);
+
+  const organizationGroups = Array.isArray(organizationParentsResponse)
+    ? organizationParentsResponse
+    : organizationParentsResponse?.data ?? [];
+  const organizations =
+    organizationsByParentResponse?.data?.map(
+      (group: { organizationChild: { id: string; name: string } }) =>
+        group.organizationChild,
+    ) ?? [];
 
   const handleSubmit = async (data: RegistrationFormData) => {
     await onSubmit(data);
@@ -225,6 +250,108 @@ export function EventRegistrationForm({
                   </FormControl>
                   <FormDescription>
                     Enter your email address
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="organizationGroupId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Organization Group</FormLabel>
+                  <Select
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      form.setValue("organizationId", "");
+                    }}
+                    defaultValue={field.value}
+                    disabled={isSubmitting}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select your organization group" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {isOrganizationParentsLoading ? (
+                        <SelectItem value="loading" disabled>
+                          Loading organization groups...
+                        </SelectItem>
+                      ) : organizationGroups.length > 0 ? (
+                        organizationGroups.map(
+                          (organizationGroup: { id: string; name: string }) => (
+                            <SelectItem
+                              key={organizationGroup.id}
+                              value={organizationGroup.id}
+                            >
+                              {organizationGroup.name}
+                            </SelectItem>
+                          ),
+                        )
+                      ) : (
+                        <SelectItem value="none" disabled>
+                          No organization groups available
+                        </SelectItem>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Optional: Select your parent organization group
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="organizationId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Organization</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={
+                      isSubmitting ||
+                      !selectedOrganizationGroup ||
+                      isOrganizationsByParentLoading
+                    }
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          placeholder={
+                            selectedOrganizationGroup
+                              ? "Select your organization"
+                              : "Select organization group first"
+                          }
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {isOrganizationsByParentLoading ? (
+                        <SelectItem value="loading" disabled>
+                          Loading organizations...
+                        </SelectItem>
+                      ) : organizations.length > 0 ? (
+                        organizations.map((organization: { id: string; name: string }) => (
+                          <SelectItem key={organization.id} value={organization.id}>
+                            {organization.name}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="none" disabled>
+                          No organizations available
+                        </SelectItem>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Optional: Select your organization under the chosen group
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

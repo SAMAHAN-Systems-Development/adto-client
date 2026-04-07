@@ -48,6 +48,12 @@ export function EventRegistrationModal({
         yearLevel: formData.yearLevel,
         ticketCategoryId,
         ...(isRsvpEnabled && { hasRsvpd: formData.hasRsvpd ?? false }),
+        ...(formData.organizationGroupId && {
+          organizationParentId: formData.organizationGroupId,
+        }),
+        ...(formData.organizationId && {
+          organizationChildId: formData.organizationId,
+        }),
       });
 
       toast({
