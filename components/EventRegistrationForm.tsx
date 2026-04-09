@@ -476,7 +476,7 @@ export function EventRegistrationForm({
                           RSVP - Confirm Attendance
                         </FormLabel>
                         <FormDescription className="text-sm text-gray-600">
-                          I confirm that I will attend this event.
+                          I confirm that I will attend this event. Leave unchecked if you will not attend.
                         </FormDescription>
                       </div>
                     </FormItem>
