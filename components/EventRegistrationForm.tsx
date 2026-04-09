@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
@@ -131,6 +131,27 @@ const formSchema = z.object({
   dataPrivacyConsent: z.boolean().refine((val) => val === true, {
     message: "You must agree to the Data Privacy Policy to proceed.",
   }),
+}).superRefine((data, ctx) => {
+  const hasOrganizationGroup = Boolean(data.organizationGroupId);
+  const hasOrganization = Boolean(data.organizationId);
+
+  if (hasOrganizationGroup && !hasOrganization) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["organizationId"],
+      message:
+        "Please select an organization when organization group is selected.",
+    });
+  }
+
+  if (!hasOrganizationGroup && hasOrganization) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["organizationGroupId"],
+      message:
+        "Please select an organization group when organization is selected.",
+    });
+  }
 });
 
 export type RegistrationFormData = z.infer<typeof formSchema>;
@@ -193,6 +214,24 @@ export function EventRegistrationForm({
     await onSubmit(data);
   };
 
+  const handleInvalidSubmit = (errors: FieldErrors<RegistrationFormData>) => {
+    if (!errors.organizationGroupId && !errors.organizationId) {
+      return;
+    }
+
+    const targetFieldId = errors.organizationId
+      ? "registration-organization-field"
+      : "registration-organization-group-field";
+    const targetElement = document.getElementById(targetFieldId);
+
+    if (targetElement) {
+      targetElement.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  };
+
   return (
     <Card className="border-0 shadow-lg">
       <CardHeader>
@@ -212,7 +251,10 @@ export function EventRegistrationForm({
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+          <form
+            onSubmit={form.handleSubmit(handleSubmit, handleInvalidSubmit)}
+            className="space-y-6"
+          >
             <FormField
               control={form.control}
               name="fullName"
@@ -260,7 +302,7 @@ export function EventRegistrationForm({
               control={form.control}
               name="organizationGroupId"
               render={({ field }) => (
-                <FormItem>
+                <FormItem id="registration-organization-group-field">
                   <FormLabel>Organization Group</FormLabel>
                   <Select
                     onValueChange={(value) => {
@@ -299,7 +341,7 @@ export function EventRegistrationForm({
                     </SelectContent>
                   </Select>
                   <FormDescription>
-                    Optional: Select your parent organization group
+                    Optional: leave this blank, or select both group and organization
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -310,7 +352,7 @@ export function EventRegistrationForm({
               control={form.control}
               name="organizationId"
               render={({ field }) => (
-                <FormItem>
+                <FormItem id="registration-organization-field">
                   <FormLabel>Organization</FormLabel>
                   <Select
                     onValueChange={field.onChange}
@@ -351,7 +393,7 @@ export function EventRegistrationForm({
                     </SelectContent>
                   </Select>
                   <FormDescription>
-                    Optional: Select your organization under the chosen group
+                    Optional: if you pick a group, you must also pick an organization
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
