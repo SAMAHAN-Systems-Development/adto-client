@@ -122,12 +122,6 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
                 Open For SAMAHAN SysDev Members
               </Badge>
             )} */}
-            {event.isOpenToOutsiders && (
-              <Badge className="bg-white text-green-600 hover:bg-white px-4 py-2 text-sm font-medium shadow-lg">
-                <span className="mr-2">🌍</span>
-                Open to Everyone
-              </Badge>
-            )}
           </div>
         </div>
 
@@ -159,7 +153,7 @@ const EventDetailsPage = ({ params }: { params: { id: string } }) => {
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-red-600 rounded-full flex-shrink-0" />
                   <span className="text-gray-900 text-sm md:text-base">
-                    {event.venue || "8th Floor Media Room, CCFC Building"}
+                    {event.venue || "TBA"}
                   </span>
                 </div>
               </div>
