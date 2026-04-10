@@ -106,6 +106,7 @@ const CLUSTERS_AND_PROGRAMS: Record<string, string[]> = {
     "AB Political Science",
     "AB Psychology",
     "AB Sociology",
+    "BS Social Work",
   ],
 };
 
